@@ -11,10 +11,14 @@ import duckdb
 import fire
 import pandas as pd
 import Stemmer
+import tiktoken
 from chromadb.db.base import UniqueConstraintError
+from openai import OpenAI
+from tqdm import tqdm
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 from utils.logging_config import configure_logging
+from utils.prompting_interface import prompt_openai_embed
 from utils.response import Response, ResponseStatus
 from utils.storage_config import get_storage_path
 from utils.summary_types import SummaryType
@@ -42,7 +46,10 @@ class IndexGenerator:
         self.keyword_index_path = os.path.join(index_path, "keyword")
         self.chroma_client = chromadb.PersistentClient(self.vector_index_path)
 
-        self.EMBEDDING_MAX_TOKENS = 512
+        if isinstance(self.embedding_model, OpenAI):
+            self.EMBEDDING_MAX_TOKENS = 8191
+        else:
+            self.EMBEDDING_MAX_TOKENS = 512
 
     def generate_index(self, index_name: str, table_ids: list | tuple = None) -> str:
         if table_ids is None:
@@ -190,19 +197,28 @@ class IndexGenerator:
                 message="No context and summary entries found for the given table ids.",
             )
 
-        for i in range(0, len(documents), 30000):
-            embeddings = self.embedding_model.encode(
-                documents[i : i + 30000],
-                batch_size=10,
-                show_progress_bar=True,
-                device="cuda",
-            )
-
-            chroma_collection.add(
-                embeddings=[embed.tolist() for embed in embeddings],
-                documents=documents[i : i + 30000],
-                ids=ids[i : i + 30000],
-            )
+        for i in tqdm(range(0, len(documents), 30000)):
+            if isinstance(self.embedding_model, OpenAI):
+                embeddings = prompt_openai_embed(
+                    self.embedding_model, documents[i : i + 30000],
+                )
+                chroma_collection.add(
+                    embeddings=embeddings,
+                    documents=documents[i : i + 30000],
+                    ids=ids[i : i + 30000],
+                )
+            else:
+                embeddings = self.embedding_model.encode(
+                    documents[i : i + 30000],
+                    batch_size=10,
+                    show_progress_bar=True,
+                    device="cuda",
+                )
+                chroma_collection.add(
+                    embeddings=[embed.tolist() for embed in embeddings],
+                    documents=documents[i : i + 30000],
+                    ids=ids[i : i + 30000],
+                )
 
         insert_df = pd.DataFrame.from_dict(
             {
@@ -332,7 +348,10 @@ class IndexGenerator:
         ).fetchall()
 
     def __merge_contexts(self, contexts: list[tuple[str, str]]) -> list[str]:
-        tokenizer = self.embedding_model.tokenizer
+        if isinstance(self.embedding_model, OpenAI):
+            tokenizer = tiktoken.encoding_for_model("gpt-4o")
+        else:
+            tokenizer = self.embedding_model.tokenizer
         table_contexts = [json.loads(context[1])["payload"] for context in contexts]
         processed_contexts = []
 

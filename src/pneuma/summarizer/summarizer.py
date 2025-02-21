@@ -10,13 +10,15 @@ from pathlib import Path
 import duckdb
 import fire
 import pandas as pd
+import tiktoken
 import torch
 from openai import OpenAI
 from tqdm import tqdm
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 from utils.logging_config import configure_logging
-from utils.prompting_interface import prompt_pipeline, prompt_pipeline_robust, prompt_openai_llm
+from utils.prompting_interface import (prompt_openai_llm, prompt_pipeline,
+                                       prompt_pipeline_robust)
 from utils.response import Response, ResponseStatus
 from utils.storage_config import get_storage_path
 from utils.summary_types import SummaryType
@@ -379,7 +381,10 @@ Describe briefly what the {column} column represents. If not possible, simply st
         return final_indices
 
     def __merge_column_descriptions(self, column_narrations: list[str]) -> list[str]:
-        tokenizer = self.embedding_model.tokenizer
+        if isinstance(self.embedding_model, OpenAI):
+            tokenizer = tiktoken.encoding_for_model("gpt-4o")
+        else:
+            tokenizer = self.embedding_model.tokenizer
         merged_column_descriptions = []
 
         col_idx = 0
@@ -416,7 +421,10 @@ Describe briefly what the {column} column represents. If not possible, simply st
         return merged_row_summaries
 
     def __merge_row_summaries(self, row_summaries: list[str]) -> list[str]:
-        tokenizer = self.embedding_model.tokenizer
+        if isinstance(self.embedding_model, OpenAI):
+            tokenizer = tiktoken.encoding_for_model("gpt-4o")
+        else:
+            tokenizer = self.embedding_model.tokenizer
         merged_row_summaries = []
 
         row_idx = 0

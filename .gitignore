@@ -20,8 +20,9 @@ share/python-wheels/
 *.egg
 *.out
 *.duckdb
-MANIFEST
+out_demo
 
 .idea
 .vscode
 .venv
+.env

@@ -9,10 +9,12 @@ import fire
 import Stemmer
 from bm25s.tokenization import convert_tokenized_to_string_list
 from chromadb.api.models.Collection import Collection
+from openai import OpenAI
 from scipy.spatial.distance import cosine
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
-from utils.prompting_interface import prompt_pipeline
+from utils.prompting_interface import (prompt_openai_embed, prompt_openai_llm,
+                                       prompt_pipeline)
 from utils.response import Response, ResponseStatus
 from utils.storage_config import get_storage_path
 
@@ -67,14 +69,17 @@ class QueryProcessor:
         if index_name != self.index_name:
             self.__init_index(index_name)
 
-        k = 1
-        n = 5
         increased_k = min(k * n, len(self.retriever.corpus))
-
         query_tokens = bm25s.tokenize(query, stemmer=self.stemmer, show_progress=False)
-        query_embedding = self.embedding_model.encode(
-            query, show_progress_bar=False
-        ).tolist()
+
+        if isinstance(self.embedding_model, OpenAI):
+            query_embedding = prompt_openai_embed(
+                self.embedding_model, [query],
+            )[0]
+        else:
+            query_embedding = self.embedding_model.encode(
+                query, show_progress_bar=False
+            ).tolist()
 
         results, scores = self.retriever.retrieve(
             query_tokens, k=increased_k, show_progress=False
@@ -261,16 +266,21 @@ class QueryProcessor:
             for node in nodes
         ]
 
-        arguments = prompt_pipeline(
-            self.pipe,
-            relevance_prompts,
-            batch_size=2,
-            context_length=32768,
-            max_new_tokens=2,
-            top_p=None,
-            temperature=None,
-            top_k=None,
-        )
+        if isinstance(self.pipe, OpenAI):
+            arguments = prompt_openai_llm(
+                self.pipe, relevance_prompts, max_new_tokens=2,
+            )
+        else:
+            arguments = prompt_pipeline(
+                self.pipe,
+                relevance_prompts,
+                batch_size=2,
+                context_length=32768,
+                max_new_tokens=2,
+                top_p=None,
+                temperature=None,
+                top_k=None,
+            )
 
         tables_relevance = {
             node_tables[arg_idx]: argument[-1]["content"].lower().startswith("yes")
