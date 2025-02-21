@@ -2,6 +2,7 @@
 
 # Pneuma
 [![Colab Demo](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/TheDataStation/pneuma/blob/main/quickstart-colab.ipynb)
+[![PyPI](https://img.shields.io/pypi/v/pneuma)](https://pypi.org/project/pneuma/)
 
 `Pneuma` is an LLM-powered data discovery system for tabular data. Given a natural language query,
 `Pneuma` searches an indexed collection and retrieves the most relevant tables for the question. It performs this search by leveraging both **content** (columns and rows) and **context** (metadata) to match tables with questions.
