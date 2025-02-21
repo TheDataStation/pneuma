@@ -12,7 +12,6 @@ import fire
 import pandas as pd
 import Stemmer
 from chromadb.db.base import UniqueConstraintError
-from sentence_transformers import SentenceTransformer
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 from utils.logging_config import configure_logging

@@ -1,6 +1,7 @@
 import os
 import platform
 
+
 def get_storage_path():
     if platform.system() == "Windows":
         return os.path.expanduser("~/Documents/Pneuma/out")

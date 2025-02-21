@@ -7,14 +7,11 @@ import chromadb
 import duckdb
 import fire
 import Stemmer
-import torch
 from bm25s.tokenization import convert_tokenized_to_string_list
 from chromadb.api.models.Collection import Collection
 from scipy.spatial.distance import cosine
-from sentence_transformers import SentenceTransformer
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
-from utils.pipeline_initializer import initialize_pipeline
 from utils.prompting_interface import prompt_pipeline
 from utils.response import Response, ResponseStatus
 from utils.storage_config import get_storage_path

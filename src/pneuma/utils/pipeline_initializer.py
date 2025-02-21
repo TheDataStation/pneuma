@@ -3,7 +3,7 @@ from transformers import pipeline
 
 
 def initialize_pipeline(
-    model_path: str, torch_dtype: dtype, context_length=8192, hf_token=""
+    model_path: str, torch_dtype: dtype, context_length=8192,
 ):
     """
     Initialize a text generation pipeline
@@ -17,18 +17,6 @@ def initialize_pipeline(
     ### Returns:
     - pipe (TextGenerationPipeline): The pipeline for text generation
     """
-
-    # Initializing the pipeline like this causes 
-    # [WARNING] '>' not supported between instances of 'int' and 'str'
-    # which makes the LLM not generate output.
-    # pipe = pipeline(
-    #     "text-generation",
-    #     model=model_path,
-    #     device_map="auto",
-    #     torch_dtype=torch_dtype,
-    #     token=hf_token,
-    # )
-
     pipe = pipeline(
         "text-generation",
         model=model_path,

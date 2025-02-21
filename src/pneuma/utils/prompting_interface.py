@@ -190,18 +190,17 @@ def prompt_pipeline_robust(
 
 if __name__ == "__main__":
     import os
-
     import torch
 
     os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-    import setproctitle
-
-    setproctitle.setproctitle("python")
 
     from pipeline_initializer import initialize_pipeline
 
-    pipe = initialize_pipeline("meta-llama/Meta-Llama-3-8B-Instruct", torch.bfloat16)
+    pipe = initialize_pipeline(
+        "meta-llama/Meta-Llama-3-8B-Instruct",
+        torch.bfloat16,
+    )
     conversations = [[{"role": "user", "content": "Tell me about Illinois!"}]]
     output = prompt_pipeline(
         pipe, conversations, 1, 8192, temperature=None, top_p=None, max_new_tokens=20
