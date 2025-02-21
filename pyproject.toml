@@ -23,6 +23,7 @@ dependencies = [
   "sentence-transformers>=3.4.1",
   "torch>=2.5.1",
   "transformers>=4.48.3",
+  "openai>=1.63.2",
 ]
 classifiers = [
   "Development Status :: 4 - Beta",

@@ -16,10 +16,10 @@ from utils.summary_types import SummaryType
 from utils.table_status import TableStatus
 
 configure_logging()
-logger = logging.getLogger("Registration")
+logger = logging.getLogger("Registrar")
 
 
-class Registration:
+class Registrar:
     def __init__(self, db_path: str = os.path.join(get_storage_path(), "storage.db")):
         os.makedirs(os.path.dirname(db_path), exist_ok=True)
         self.db_path = db_path
@@ -394,4 +394,4 @@ class Registration:
 
 
 if __name__ == "__main__":
-    fire.Fire(Registration)
+    fire.Fire(Registrar)

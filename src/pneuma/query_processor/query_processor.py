@@ -17,7 +17,7 @@ from utils.response import Response, ResponseStatus
 from utils.storage_config import get_storage_path
 
 
-class Query:
+class QueryProcessor:
     def __init__(
         self,
         llm,
@@ -312,4 +312,4 @@ Is the table relevant to answer the question? Begin your answer with yes/no."""
 
 
 if __name__ == "__main__":
-    fire.Fire(Query)
+    fire.Fire(QueryProcessor)

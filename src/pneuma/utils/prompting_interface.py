@@ -1,6 +1,7 @@
 import logging
 
 import torch
+from openai import OpenAI, OpenAIError
 from torch.cuda import OutOfMemoryError
 from transformers import set_seed
 from transformers.pipelines.text_generation import TextGenerationPipeline
@@ -75,7 +76,7 @@ def prompt_pipeline(
     - conversations (list[list[dict[str, str]]]): The data type of the model
     - batch_size (int): The batch size to process conversations
     - context_length (int): The LLM's context length
-    - max_new_tokens (int): Max number of tokens generated for each prompt
+    - max_new_tokens (int): Max tokens to generate
     - do_sample (bool): Perform sampling or not
     - top_k (int): The number of tokens to consider when sampling
     - top_p (float): Minimum cumulative probability of tokens being considered
@@ -83,7 +84,7 @@ def prompt_pipeline(
     - temperature (float): Control how sharp the distribution (smaller means sharper)
 
     ### Returns:
-    - conversations (list[list[dict[str, str]]]): The conversations appended with the model's outputs
+    - conversations (list[list[dict[str, str]]]): The conversations with model responses appended
     """
     generation_configs = {
         "max_new_tokens": max_new_tokens,
@@ -133,10 +134,10 @@ def prompt_pipeline_robust(
 
     ### Parameters:
     - pipe (TextGenerationPipeline): An initialized pipeline.
-    - conversations (list[list[dict[str, str]]]): The data type of the model
+    - conversations (list[list[dict[str, str]]]): List of conversations with {role, content}
     - batch_size (int): The batch size to process conversations
     - context_length (int): The LLM's context length
-    - max_new_tokens (int): Max number of tokens generated for each prompt
+    - max_new_tokens (int): Max tokens to generate
     - do_sample (bool): Perform sampling or not
     - top_k (int): The number of tokens to consider when sampling
     - top_p (float): Minimum cumulative probability of tokens being considered
@@ -144,7 +145,7 @@ def prompt_pipeline_robust(
     - temperature (float): Control how sharp the distribution (smaller means sharper)
 
     ### Returns:
-    - conversations (list[list[dict[str, str]]]): The conversations appended with the model's outputs
+    - list[list[dict[str, str]]]: The conversations with model responses appended
     """
     generation_configs = {
         "max_new_tokens": max_new_tokens,
@@ -186,6 +187,65 @@ def prompt_pipeline_robust(
                 )
             torch.cuda.empty_cache()
             logger.warning(f"Reducing batch size to {batch_size}")
+
+
+def prompt_openai_llm(
+    llm: OpenAI,
+    conversations: list[list[dict[str, str]]],
+    model="gpt-4o-mini",
+    max_new_tokens=512,
+    temperature=0.7,
+    top_p=1.0,
+    retry_attempts=5,
+):
+    """
+    Replicates the Hugging Face pipeline for text generation using OpenAI.
+
+    ### Parameters:
+    - conversations (list[list[dict[str, str]]]): List of conversations with {role, content}
+    - max_new_tokens (int): Max tokens to generate
+    - temperature (float): Control how sharp the distribution (smaller means sharper)
+    - top_p (float): Minimum cumulative probability of tokens being considered
+    - retry_attempts (int): Number of retries in case of failure
+
+    ### Returns:
+    - list[list[dict[str, str]]]: The conversations with model responses appended
+    """
+    for conv in conversations:
+        for attempt in range(retry_attempts):
+            try:
+                response = llm.chat.completions.create(
+                    model=model,
+                    messages=conv,
+                    max_tokens=max_new_tokens,
+                    temperature=temperature,
+                    top_p=top_p,
+                    seed=42,
+                )
+                conv.append({
+                    "role": "assistant",
+                    "content": response.choices[0].message.content,
+                })
+                break
+            except OpenAIError as e:
+                if attempt < retry_attempts - 1:
+                    print(f"OpenAI API error: {e}. Retrying ({attempt + 1}/{retry_attempts})...")
+                else:
+                    print(f"Failed after {retry_attempts} attempts.")
+                    raise e
+    return conversations
+
+
+def prompt_openai_embed(
+    embed_model: OpenAI,
+    documents: list[str],
+    model="text-embedding-3-small",
+):
+    responses = embed_model.embeddings.create(
+        input=documents, model=model,
+    )
+    embeddings = [i.embedding for i in responses.data]
+    return embeddings
 
 
 if __name__ == "__main__":

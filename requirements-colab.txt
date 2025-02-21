@@ -1,4 +1,0 @@
-bm25s==0.1.10
-fire==0.6.0
-PyStemmer==2.2.0.1
-chromadb @ git+https://github.com/luthfibalaka/chroma.git@3cbf2bdedaa7383f1385f4ff08c5bdd1b2ccbde1
