@@ -286,6 +286,7 @@ class Summarizer:
                         max_new_tokens=400,
                         temperature=None,
                         top_p=None,
+                        top_k=None,
                     )
                     outputs += llm_output[0]
 
