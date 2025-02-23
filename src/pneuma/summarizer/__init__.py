@@ -1,1 +1,1 @@
-from .summarizer import Summarizer
+from pneuma.summarizer.summarizer import Summarizer

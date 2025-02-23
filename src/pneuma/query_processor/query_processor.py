@@ -1,22 +1,27 @@
+import logging
 import os
-import sys
-from pathlib import Path
 
 import bm25s
-import chromadb
 import duckdb
 import fire
 import Stemmer
 from bm25s.tokenization import convert_tokenized_to_string_list
-from chromadb.api.models.Collection import Collection
+from chromadb_deterministic.api.models.Collection import Collection
+from chromadb_deterministic import PersistentClient
 from openai import OpenAI
 from scipy.spatial.distance import cosine
 
-sys.path.append(str(Path(__file__).resolve().parent.parent))
-from utils.prompting_interface import (prompt_openai_embed, prompt_openai_llm,
-                                       prompt_pipeline)
-from utils.response import Response, ResponseStatus
-from utils.storage_config import get_storage_path
+from pneuma.utils.logging_config import configure_logging
+from pneuma.utils.prompting_interface import (
+    prompt_openai_embed,
+    prompt_openai_llm,
+    prompt_pipeline,
+)
+from pneuma.utils.response import Response, ResponseStatus
+from pneuma.utils.storage_config import get_storage_path
+
+configure_logging()
+logger = logging.getLogger("Registrar")
 
 
 class QueryProcessor:
@@ -39,7 +44,7 @@ class QueryProcessor:
         self.index_path = index_path
         self.vector_index_path = os.path.join(index_path, "vector")
         self.keyword_index_path = os.path.join(index_path, "keyword")
-        self.chroma_client = chromadb.PersistentClient(self.vector_index_path)
+        self.chroma_client = PersistentClient(self.vector_index_path)
 
         if index_name is not None:
             self.__init_index(index_name)
@@ -55,6 +60,7 @@ class QueryProcessor:
         alpha: int = 0.5,
         dictionary_id_bm25=None,
     ) -> str:
+        logger.info(f"Querying the index {index_name}")
         if query is None:
             while True:
                 query = input("Enter query: ")
@@ -72,15 +78,18 @@ class QueryProcessor:
         increased_k = min(k * n, len(self.retriever.corpus))
         query_tokens = bm25s.tokenize(query, stemmer=self.stemmer, show_progress=False)
 
+        logger.info("=> Encoding the query")
         if isinstance(self.embedding_model, OpenAI):
             query_embedding = prompt_openai_embed(
-                self.embedding_model, [query],
+                self.embedding_model,
+                [query],
             )[0]
         else:
             query_embedding = self.embedding_model.encode(
                 query, show_progress_bar=False
             ).tolist()
 
+        logger.info("=> Retrieving from both indices")
         results, scores = self.retriever.retrieve(
             query_tokens, k=increased_k, show_progress=False
         )
@@ -89,6 +98,7 @@ class QueryProcessor:
             query_embeddings=[query_embedding], n_results=increased_k
         )
 
+        logger.info("=> Utilizing hybrid retriever")
         all_nodes = self.__hybrid_retriever(
             self.retriever,
             self.chroma_collection,
@@ -108,10 +118,11 @@ class QueryProcessor:
             table = table.split("_SEP_")[0]
             tables.append(table)
 
+        logger.info("Query process done!")
         return Response(
             status=ResponseStatus.SUCCESS,
             message=f"Query successful for index {index_name}.",
-            data={"query": query, "response": tables},
+            data={"query": query, "relevant_tables": tables},
         ).to_json()
 
     def __init_index(self, index_name: str):
@@ -170,6 +181,8 @@ class QueryProcessor:
             all_nodes.append((node_id, combined_score, doc))
 
         sorted_nodes = sorted(all_nodes, key=lambda node: (-node[1], node[0]))[:k]
+
+        logger.info("==> Performing re-ranking")
         reranked_nodes = self.__rerank(sorted_nodes, query)
         return reranked_nodes
 
@@ -268,7 +281,9 @@ class QueryProcessor:
 
         if isinstance(self.pipe, OpenAI):
             arguments = prompt_openai_llm(
-                self.pipe, relevance_prompts, max_new_tokens=2,
+                self.pipe,
+                relevance_prompts,
+                max_new_tokens=2,
             )
         else:
             arguments = prompt_pipeline(

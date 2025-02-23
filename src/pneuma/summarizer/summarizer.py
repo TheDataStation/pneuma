@@ -3,9 +3,7 @@ import json
 import logging
 import math
 import os
-import sys
 from collections import defaultdict
-from pathlib import Path
 
 import duckdb
 import fire
@@ -15,14 +13,13 @@ import torch
 from openai import OpenAI
 from tqdm import tqdm
 
-sys.path.append(str(Path(__file__).resolve().parent.parent))
-from utils.logging_config import configure_logging
-from utils.prompting_interface import (prompt_openai_llm, prompt_pipeline,
+from pneuma.utils.logging_config import configure_logging
+from pneuma.utils.prompting_interface import (prompt_openai_llm, prompt_pipeline,
                                        prompt_pipeline_robust)
-from utils.response import Response, ResponseStatus
-from utils.storage_config import get_storage_path
-from utils.summary_types import SummaryType
-from utils.table_status import TableStatus
+from pneuma.utils.response import Response, ResponseStatus
+from pneuma.utils.storage_config import get_storage_path
+from pneuma.utils.summary_types import SummaryType
+from pneuma.utils.table_status import TableStatus
 
 configure_logging()
 logger = logging.getLogger("Summarizer")
@@ -49,7 +46,7 @@ class Summarizer:
 
     def summarize(self, table_id: str = None) -> str:
         if table_id is None or table_id == "":
-            logger.info("Generating summaries for all unsummarized tables...")
+            logger.info("Generating summaries for all unsummarized tables")
             table_ids = [
                 entry[0].replace("'", "''")
                 for entry in self.connection.sql(
@@ -57,7 +54,7 @@ class Summarizer:
                     WHERE status = '{TableStatus.REGISTERED}'"""
                 ).fetchall()
             ]
-            logger.info("Found %d unsummarized tables.", len(table_ids))
+            logger.info(f"Found {len(table_ids)} unsummarized tables")
         else:
             table_ids = [table_id.replace("'", "''")]
 
@@ -88,7 +85,7 @@ class Summarizer:
         ]
 
         for table_id in summarized_table_ids:
-            logger.info("Dropping table with ID: %s", table_id)
+            logger.info(f"Dropping table with ID {table_id}")
             # Escape single quotes to avoid breaking the SQL query
             table_id = table_id.replace("'", "''")
             self.connection.sql(f'DROP TABLE "{table_id}"')
@@ -276,7 +273,6 @@ class Summarizer:
                 outputs: list[list[dict[str, str]]] = []
                 max_batch_size = optimal_batch_size
                 same_batch_size_counter = 0
-                print(f"Optimal batch size: {optimal_batch_size}")
                 for i in tqdm(range(0, len(conversations), optimal_batch_size)):
                     llm_output = prompt_pipeline_robust(
                         self.pipe,
@@ -319,13 +315,19 @@ Describe briefly what the {column} column represents. If not possible, simply st
     def __get_optimal_batch_size(self, conversations: list[dict[str, str]]):
         max_batch_size = self.MAX_LLM_BATCH_SIZE
         min_batch_size = 1
+        logger.info(
+            f"Exploring optimal batch size within [{min_batch_size},{max_batch_size}] (binary search)"
+        )
+
         while min_batch_size < max_batch_size:
             mid_batch_size = (min_batch_size + max_batch_size) // 2
+            logger.info(f"=> Current mid batch size: {mid_batch_size}")
             if self.__is_fit_in_memory(conversations, mid_batch_size):
                 min_batch_size = mid_batch_size + 1
             else:
                 max_batch_size = mid_batch_size - 1
         optimal_batch_size = min_batch_size
+        logger.info(f"Optimal batch size: {optimal_batch_size}")
         return optimal_batch_size
 
     def __is_fit_in_memory(self, conversations: list[dict[str, str]], batch_size: int):

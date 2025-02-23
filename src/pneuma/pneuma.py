@@ -4,17 +4,17 @@ from typing import Any, Optional
 
 import fire
 from huggingface_hub import login
-from index_generator.index_generator import IndexGenerator
 from openai import OpenAI
 from sentence_transformers import SentenceTransformer
-from summarizer.summarizer import Summarizer
 from torch import bfloat16
-from utils.pipeline_initializer import initialize_pipeline
-from utils.storage_config import get_storage_path
 
-from query_processor.query_processor import QueryProcessor
-from registrar.registrar import Registrar
-from utils.logging_config import configure_logging
+from pneuma.index_generator.index_generator import IndexGenerator
+from pneuma.query_processor.query_processor import QueryProcessor
+from pneuma.registrar.registrar import Registrar
+from pneuma.summarizer.summarizer import Summarizer
+from pneuma.utils.logging_config import configure_logging
+from pneuma.utils.pipeline_initializer import initialize_pipeline
+from pneuma.utils.storage_config import get_storage_path
 
 configure_logging()
 logger = logging.getLogger("Pneuma")

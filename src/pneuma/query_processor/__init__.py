@@ -1,1 +1,1 @@
-from .query_processor import QueryProcessor
+from pneuma.query_processor.query_processor import QueryProcessor

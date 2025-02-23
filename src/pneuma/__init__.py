@@ -1,7 +1,7 @@
-# We need to import index generator because it is the first import in pneuma.py.
-# If we don't have this import in this init file, we will get ModuleNotFoundError.
-# when running the code as a pip-installed package.s
-# However, for some reason, we only need to import one module and the rest
-# will import just fine.
-from .index_generator.index_generator import IndexGenerator
-from .pneuma import Pneuma
+import logging
+
+# Suppress warnings related to non-CUDA JAX usage by bm25s
+logger = logging.getLogger("jax._src.xla_bridge")
+logger.setLevel(logging.ERROR)
+
+from pneuma.pneuma import Pneuma

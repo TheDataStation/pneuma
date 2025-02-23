@@ -6,22 +6,21 @@ import time
 from pathlib import Path
 
 import bm25s
-import chromadb
 import duckdb
 import fire
 import pandas as pd
 import Stemmer
 import tiktoken
-from chromadb.db.base import UniqueConstraintError
+from chromadb_deterministic.db.base import UniqueConstraintError
+from chromadb_deterministic import PersistentClient, Collection
 from openai import OpenAI
 from tqdm import tqdm
 
-sys.path.append(str(Path(__file__).resolve().parent.parent))
-from utils.logging_config import configure_logging
-from utils.prompting_interface import prompt_openai_embed
-from utils.response import Response, ResponseStatus
-from utils.storage_config import get_storage_path
-from utils.summary_types import SummaryType
+from pneuma.utils.logging_config import configure_logging
+from pneuma.utils.prompting_interface import prompt_openai_embed
+from pneuma.utils.response import Response, ResponseStatus
+from pneuma.utils.storage_config import get_storage_path
+from pneuma.utils.summary_types import SummaryType
 
 configure_logging()
 logger = logging.getLogger("IndexGenerator")
@@ -44,7 +43,7 @@ class IndexGenerator:
         self.index_path = index_path
         self.vector_index_path = os.path.join(index_path, "vector")
         self.keyword_index_path = os.path.join(index_path, "keyword")
-        self.chroma_client = chromadb.PersistentClient(self.vector_index_path)
+        self.chroma_client = PersistentClient(self.vector_index_path)
 
         if isinstance(self.embedding_model, OpenAI):
             self.EMBEDDING_MAX_TOKENS = 8191
@@ -53,7 +52,7 @@ class IndexGenerator:
 
     def generate_index(self, index_name: str, table_ids: list | tuple = None) -> str:
         if table_ids is None:
-            logger.info("No table ids provided. Generating index for all tables...")
+            logger.info("No table ids provided; generating index for all tables")
             table_ids = [
                 entry[0]
                 for entry in self.connection.sql(
@@ -63,7 +62,7 @@ class IndexGenerator:
         elif isinstance(table_ids, str):
             table_ids = (table_ids,)
 
-        logger.info("Generating index for %d tables...", len(table_ids))
+        logger.info(f"Generating index for {len(table_ids)} tables")
 
         ### GENERATING AND INSERTING TABLES TO VECTOR INDEX ###
         start_time = time.time()
@@ -160,13 +159,13 @@ class IndexGenerator:
         self,
         index_id: int,
         table_ids: list | tuple,
-        chroma_collection: chromadb.Collection,
+        chroma_collection: Collection,
     ) -> Response:
         documents = []
         ids = []
 
         for table_id in table_ids:
-            logger.info("Processing table %s...", table_id)
+            logger.info(f"Processing table {table_id}")
 
             narration_summaries = self.__get_table_summaries(
                 table_id, SummaryType.NARRATION
@@ -241,7 +240,7 @@ class IndexGenerator:
     def __generate_keyword_index(self, index_name):
         retriever = bm25s.BM25(corpus=[])
         corpus_tokens = bm25s.tokenize([])
-        retriever.index(corpus_tokens)
+        retriever.index(corpus_tokens, show_progress=False)
         retriever.save(os.path.join(self.keyword_index_path, index_name), corpus=[])
 
         index_id = self.connection.sql(
@@ -268,7 +267,7 @@ class IndexGenerator:
 
         corpus_json = []
         for table_id in table_ids:
-            logger.info("Processing table %s...", table_id)
+            logger.info(f"Processing table {table_id}")
 
             narration_summaries = self.__get_table_summaries(
                 table_id, SummaryType.NARRATION

@@ -1,1 +1,1 @@
-from .registrar import Registrar
+from pneuma.registrar.registrar import Registrar

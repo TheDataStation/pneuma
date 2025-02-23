@@ -1,19 +1,16 @@
 import json
 import logging
 import os
-import sys
-from pathlib import Path
 
 import duckdb
 import fire
 import pandas as pd
 
-sys.path.append(str(Path(__file__).resolve().parent.parent))
-from utils.logging_config import configure_logging
-from utils.response import Response, ResponseStatus
-from utils.storage_config import get_storage_path
-from utils.summary_types import SummaryType
-from utils.table_status import TableStatus
+from pneuma.utils.logging_config import configure_logging
+from pneuma.utils.response import Response, ResponseStatus
+from pneuma.utils.storage_config import get_storage_path
+from pneuma.utils.summary_types import SummaryType
+from pneuma.utils.table_status import TableStatus
 
 configure_logging()
 logger = logging.getLogger("Registrar")
@@ -29,7 +26,7 @@ class Registrar:
         try:
             self.connection.execute("INSTALL httpfs")
             self.connection.execute("LOAD httpfs")
-            logger.info("HTTPFS installed and loaded.")
+            logger.info("HTTPFS installed and loaded")
 
             self.connection.sql(
                 """CREATE TABLE IF NOT EXISTS table_status (
@@ -42,12 +39,12 @@ class Registrar:
                     )
                 """
             )
-            logger.info("Table status table created.")
+            logger.info("Table status table created")
 
             # Arbitrary auto-incrementing id for contexts and summaries.
             # Change to "CREATE IF NOT EXISTS" on production.
             self.connection.sql("CREATE SEQUENCE IF NOT EXISTS id_seq START 1")
-            logger.info("ID sequence created.")
+            logger.info("ID sequence created")
 
             # DuckDB does not support "ON DELETE CASCADE" so be careful with deletions.
             self.connection.sql(
@@ -58,7 +55,7 @@ class Registrar:
                     )
                 """
             )
-            logger.info("Table contexts table created.")
+            logger.info("Table contexts table created")
 
             # DuckDB does not support "ON DELETE CASCADE" so be careful with deletions.
             self.connection.sql(
@@ -70,7 +67,7 @@ class Registrar:
                     )
                 """
             )
-            logger.info("Table summaries table created.")
+            logger.info("Table summaries table created")
 
             self.connection.sql(
                 """CREATE TABLE IF NOT EXISTS indexes (
@@ -80,7 +77,7 @@ class Registrar:
                     )
                 """
             )
-            logger.info("Indexes table created.")
+            logger.info("Indexes table created")
 
             self.connection.sql(
                 """CREATE TABLE IF NOT EXISTS index_table_mappings (
@@ -90,7 +87,7 @@ class Registrar:
                     )
                 """
             )
-            logger.info("Index table mappings table created.")
+            logger.info("Index table mappings table created")
 
             # TODO: Adjust the response column to the actual response type.
             self.connection.sql(
@@ -103,7 +100,7 @@ class Registrar:
                     )
                 """
             )
-            logger.info("Query history table created.")
+            logger.info("Query history table created")
 
             return Response(
                 status=ResponseStatus.SUCCESS,
@@ -266,11 +263,11 @@ class Registrar:
     def __read_table_folder(
         self, folder_path: str, creator: str, accept_duplicates: bool = False
     ) -> Response:
-        logger.info("Reading folder %s...", folder_path)
+        logger.info(f"Reading folder {folder_path}")
         paths = [os.path.join(folder_path, f) for f in os.listdir(folder_path)]
         data = []
         for path in paths:
-            logger.info("Processing %s...", path)
+            logger.info(f"=> Processing {path}")
 
             # If the path is a folder, recursively read the folder.
             if os.path.isdir(path):
@@ -281,10 +278,7 @@ class Registrar:
 
             response = self.__read_table_file(path, creator, accept_duplicates)
             logger.info(
-                "Processing table %s %s: %s",
-                path,
-                response.status.value,
-                response.message,
+                f"==> Processing table {path} {response.status.value}: {response.message}"
             )
             data.append(response.data)
 
@@ -363,11 +357,11 @@ class Registrar:
     def __read_metadata_folder(
         self, metadata_path: str, metadata_type: str, table_id: str
     ) -> Response:
-        logger.info("Reading metadata folder %s...", metadata_path)
+        logger.info(f"Reading metadata folder {metadata_path}")
         paths = [os.path.join(metadata_path, f) for f in os.listdir(metadata_path)]
         metadata_ids = []
         for path in paths:
-            logger.info("Processing %s...", path)
+            logger.info(f"=> Processing {path}")
 
             # If the path is a folder, recursively read the folder.
             if os.path.isdir(path):
@@ -378,10 +372,7 @@ class Registrar:
 
             response = self.__read_metadata_file(path, metadata_type, table_id)
             logger.info(
-                "Processing metadata %s %s: %s",
-                path,
-                response.status.value,
-                response.message,
+                f"==> Processing metadata {path} {response.status.value}: {response.message}"
             )
             metadata_ids.extend(response.data["metadata_ids"])
 
