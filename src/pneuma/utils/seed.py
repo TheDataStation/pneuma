@@ -1,9 +1,6 @@
 import os
-import sys
-from pathlib import Path
 
-sys.path.append(str(Path(__file__).resolve().parent.parent))
-from registrar.registrar import Registrar
+from pneuma.registrar.registrar import Registrar
 
 DB_PATH = "../out/storage.db"
 

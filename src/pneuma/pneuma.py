@@ -172,14 +172,14 @@ class Pneuma:
     def query_index(
         self,
         index_name: str,
-        query: str,
+        queries: list[str] | str,
         k: int = 1,
         n: int = 5,
         alpha: int = 0.5,
     ) -> str:
         if self.query_processor is None:
             self.__init_query_processor()
-        return self.query_processor.query(index_name, query, k, n, alpha)
+        return self.query_processor.query(index_name, queries, k, n, alpha)
 
 
 def main():

@@ -2,14 +2,15 @@ import logging
 import os
 
 import bm25s
-import duckdb
 import fire
 import Stemmer
-from bm25s.tokenization import convert_tokenized_to_string_list
-from chromadb_deterministic.api.models.Collection import Collection
+from bm25s.tokenization import Tokenized, convert_tokenized_to_string_list
 from chromadb_deterministic import PersistentClient
+from chromadb_deterministic.api.models.Collection import Collection
 from openai import OpenAI
 from scipy.spatial.distance import cosine
+from sentence_transformers import SentenceTransformer
+from tqdm import tqdm
 
 from pneuma.utils.logging_config import configure_logging
 from pneuma.utils.prompting_interface import (
@@ -28,134 +29,130 @@ class QueryProcessor:
     def __init__(
         self,
         llm,
-        embed_model,
-        db_path: str = os.path.join(get_storage_path(), "storage.db"),
+        embed_model: OpenAI | SentenceTransformer,
+        db_path: str = None,
         index_path: str = None,
-        index_name: str = None,
     ):
         self.pipe = llm
         self.embedding_model = embed_model
-        self.db_path = db_path
-        self.connection = duckdb.connect(db_path)
         self.stemmer = Stemmer.Stemmer("english")
 
+        if db_path is None:
+            db_path = os.path.join(get_storage_path(), "storage.db")
         if index_path is None:
             index_path = os.path.join(os.path.dirname(db_path), "indexes")
-        self.index_path = index_path
-        self.vector_index_path = os.path.join(index_path, "vector")
-        self.keyword_index_path = os.path.join(index_path, "keyword")
-        self.chroma_client = PersistentClient(self.vector_index_path)
 
-        if index_name is not None:
-            self.__init_index(index_name)
-        else:
-            self.index_name = None
+        self.vector_index_path = os.path.join(index_path, "vector")
+        self.fulltext_index_path = os.path.join(index_path, "fulltext")
+
+    def __get_retrievers(self, index_name: str) -> tuple[Collection, bm25s.BM25]:
+        chroma_client = PersistentClient(self.vector_index_path)
+        vector_retriever = chroma_client.get_collection(index_name)
+        fulltext_retriever = bm25s.BM25.load(
+            os.path.join(self.fulltext_index_path, index_name),
+            load_corpus=True,
+        )
+        return (vector_retriever, fulltext_retriever)
 
     def query(
         self,
         index_name: str,
-        query: str = None,
+        queries: str | list[str],
         k: int = 1,
         n: int = 5,
         alpha: int = 0.5,
-        dictionary_id_bm25=None,
     ) -> str:
         logger.info(f"Querying the index {index_name}")
-        if query is None:
-            while True:
-                query = input("Enter query: ")
-                if query == "exit" or query == "":
-                    break
-                print(self.query(index_name, query, k, n, alpha))
+
+        if isinstance(queries, str):
+            queries = [queries]
+
+        try:
+            vector_retriever, fulltext_retriever = self.__get_retrievers(index_name)
+        except ValueError:
+            error_message = f"Index with name {index_name} does not exist."
+            logger.debug(error_message)
             return Response(
-                status=ResponseStatus.SUCCESS,
-                message=f"Interactive querying successful for index {index_name}.",
+                status=ResponseStatus.ERROR,
+                message=error_message,
             ).to_json()
 
-        if index_name != self.index_name:
-            self.__init_index(index_name)
+        # Retrieve more documents (k * n) to pool more relevant documents
+        increased_k = min(k * n, len(fulltext_retriever.corpus))
+        queries_tokens: list[Tokenized] = [bm25s.tokenize(query) for query in queries]
 
-        increased_k = min(k * n, len(self.retriever.corpus))
-        query_tokens = bm25s.tokenize(query, stemmer=self.stemmer, show_progress=False)
+        bm25s.tokenize(queries, stemmer=self.stemmer, show_progress=False)
 
-        logger.info("=> Encoding the query")
+        logger.info("=> Encoding the queries")
         if isinstance(self.embedding_model, OpenAI):
-            query_embedding = prompt_openai_embed(
+            queries_embeddings = prompt_openai_embed(
                 self.embedding_model,
-                [query],
-            )[0]
+                queries,
+            )
         else:
-            query_embedding = self.embedding_model.encode(
-                query, show_progress_bar=False
+            queries_embeddings: list[list[float]] = self.embedding_model.encode(
+                queries, show_progress_bar=False
             ).tolist()
 
-        logger.info("=> Retrieving from both indices")
-        results, scores = self.retriever.retrieve(
-            query_tokens, k=increased_k, show_progress=False
-        )
-        bm25_res = (results, scores)
-        vec_res = self.chroma_collection.query(
-            query_embeddings=[query_embedding], n_results=increased_k
-        )
+        queries_tables: list[dict[str, str | list[str]]] = []
+        for query_idx, query in enumerate(tqdm(queries, desc="Processing the queries")):
+            results, scores = fulltext_retriever.retrieve(
+                queries[query_idx], k=increased_k, show_progress=False
+            )
+            bm25_res = (results, scores)
+            vec_res = vector_retriever.query(
+                query_embeddings=[queries_embeddings[query_idx]], n_results=increased_k
+            )
 
-        logger.info("=> Utilizing hybrid retriever")
-        all_nodes = self.__hybrid_retriever(
-            self.retriever,
-            self.chroma_collection,
-            bm25_res,
-            vec_res,
-            increased_k,
-            query,
-            alpha,
-            query_tokens,
-            query_embedding,
-            self.dictionary_id_bm25,
-        )
+            all_nodes = self.__hybrid_retriever(
+                fulltext_retriever,
+                vector_retriever,
+                bm25_res,
+                vec_res,
+                increased_k,
+                query,
+                alpha,
+                queries_tokens[query_idx],
+                queries_embeddings[query_idx],
+            )
 
-        all_nodes = all_nodes[:k]
-        tables = []
-        for table, score, content in all_nodes:
-            table = table.split("_SEP_")[0]
-            tables.append(table)
+            all_nodes = all_nodes[:k]
+            tables = []
+            for table, score, content in all_nodes:
+                table = table.split("_SEP_")[0]
+                tables.append(table)
+            queries_tables.append(
+                {
+                    "query": query,
+                    "retrieved_tables": tables,
+                }
+            )
 
-        logger.info("Query process done!")
+        logger.info("All queries have been processed.")
         return Response(
             status=ResponseStatus.SUCCESS,
-            message=f"Query successful for index {index_name}.",
-            data={"query": query, "relevant_tables": tables},
+            message=f"Queries successful for index {index_name}",
+            data=queries_tables,
         ).to_json()
-
-    def __init_index(self, index_name: str):
-        try:
-            self.chroma_collection = self.chroma_client.get_collection(index_name)
-        except ValueError:
-            return f"Index with name {index_name} does not exist."
-
-        self.retriever = bm25s.BM25.load(
-            os.path.join(self.keyword_index_path, index_name),
-            load_corpus=True,
-        )
-        self.dictionary_id_bm25 = {
-            datum["metadata"]["table"]: idx
-            for idx, datum in enumerate(self.retriever.corpus)
-        }
-        self.index_name = index_name
 
     def __hybrid_retriever(
         self,
-        bm_25_retriever,
-        vec_retriever,
+        bm_25_retriever: bm25s.BM25,
+        vec_retriever: Collection,
         bm25_res,
         vec_res,
         k: int,
         query: str,
-        alpha: float = 0.5,
-        query_tokens=None,
-        question_embedding=None,
-        dictionary_id_bm25=None,
+        alpha: float,
+        query_tokens: Tokenized,
+        question_embedding: list[float],
     ):
         vec_ids = {vec_id for vec_id in vec_res["ids"][0]}
         bm25_ids = {node["metadata"]["table"] for node in bm25_res[0][0]}
+        dictionary_id_bm25 = {
+            datum["metadata"]["table"]: idx
+            for idx, datum in enumerate(bm_25_retriever.corpus)
+        }
 
         processed_nodes_bm25 = self.__process_nodes_bm25(
             bm25_res,
@@ -182,12 +179,16 @@ class QueryProcessor:
 
         sorted_nodes = sorted(all_nodes, key=lambda node: (-node[1], node[0]))[:k]
 
-        logger.info("==> Performing re-ranking")
         reranked_nodes = self.__rerank(sorted_nodes, query)
         return reranked_nodes
 
     def __process_nodes_bm25(
-        self, items, all_ids, dictionary_id_bm25, bm25_retriever, query_tokens
+        self,
+        items,
+        all_ids,
+        dictionary_id_bm25,
+        bm25_retriever: bm25s.BM25,
+        query_tokens: Tokenized,
     ):
         results = [node for node in items[0][0]]
         scores = [node for node in items[1][0]]
@@ -222,7 +223,11 @@ class QueryProcessor:
         return processed_nodes
 
     def __process_nodes_vec(
-        self, items, missing_ids, collection: Collection, question_embedding
+        self,
+        items,
+        missing_ids,
+        collection: Collection,
+        question_embedding: list[float],
     ):
         extra_information = collection.get_fast(
             ids=missing_ids, limit=len(missing_ids), include=["documents", "embeddings"]
