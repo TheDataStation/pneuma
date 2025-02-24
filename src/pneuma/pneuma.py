@@ -6,6 +6,7 @@ import fire
 from huggingface_hub import login
 from openai import OpenAI
 from sentence_transformers import SentenceTransformer
+from transformers import TextGenerationPipeline
 from torch import bfloat16
 
 from pneuma.index_generator.index_generator import IndexGenerator
@@ -54,8 +55,8 @@ class Pneuma:
             None  # Generates document indexes
         )
         self.query_processor: Optional[QueryProcessor] = None  # Handles user queries
-        self.llm: Optional[Any] = None  # Placeholder for LLM
-        self.embed_model: Optional[Any] = None  # Placeholder for embedding model
+        self.llm: Optional[OpenAI | TextGenerationPipeline] = None  # Placeholder for LLM
+        self.embed_model: Optional[OpenAI | SentenceTransformer] = None  # Placeholder for embedding model
 
     def __hf_login(self):
         """Logs into Hugging Face if a token is provided."""
@@ -194,6 +195,24 @@ class Pneuma:
         n: int = 5,
         alpha: int = 0.5,
     ) -> str:
+        """
+        Retrieves tables for the given `queries` against the index `index_name`
+        by utilizing the `QueryProcessor` module.
+
+        ## Args
+        - **index_name** (`str`): The name of the index to be retrieved against.
+        - **queries** (`str | list[str]`): The query of list of queries to be executed.
+        - **k** (`int`): The number of documents associated with the tables to be
+        retrieved.
+        - **n** (`int`): The multiplicative factor of `k` to pool more relevant
+        documents for the hybrid retrieval process.
+        - **alpha** (`float`): The weighting factor of the vector and full-text
+        retrievers within a hybrid index. Lower `alpha` gives more weight to
+        the vector retriever.
+
+        ## Returns
+        - `str`: A JSON string representing the result of the process (`Response`).
+        """
         if self.query_processor is None:
             self.__init_query_processor()
         return self.query_processor.query(index_name, queries, k, n, alpha)
