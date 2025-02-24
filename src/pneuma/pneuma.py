@@ -50,7 +50,9 @@ class Pneuma:
 
         self.registrar: Optional[Registrar] = None  # Handles dataset registration
         self.summarizer: Optional[Summarizer] = None  # Summarizes table contents
-        self.index_generator: Optional[IndexGenerator] = None  # Generates document indexes
+        self.index_generator: Optional[IndexGenerator] = (
+            None  # Generates document indexes
+        )
         self.query_processor: Optional[QueryProcessor] = None  # Handles user queries
         self.llm: Optional[Any] = None  # Placeholder for LLM
         self.embed_model: Optional[Any] = None  # Placeholder for embedding model
@@ -101,14 +103,15 @@ class Pneuma:
         if self.llm is None:
             if self.use_local_model:
                 self.llm = initialize_pipeline(
-                    self.llm_path, bfloat16, context_length=32768,
+                    self.llm_path,
+                    bfloat16,
+                    context_length=32768,
                 )
                 # Specific setting for batching
                 self.llm.tokenizer.pad_token_id = self.llm.model.config.eos_token_id
                 self.llm.tokenizer.padding_side = "left"
             else:
                 self.llm = OpenAI(api_key=self.openai_api_key)
-
 
     def __init_embed_model(self):
         if self.embed_model is None:
@@ -164,7 +167,21 @@ class Pneuma:
             self.__init_summarizer()
         return self.summarizer.purge_tables()
 
-    def generate_index(self, index_name: str, table_ids: list | tuple = None) -> str:
+    def generate_index(
+        self, index_name: str, table_ids: list[str] | tuple[str] = None
+    ) -> str:
+        """
+        Generates a hybrid index with name `index_name` for a given `table_ids`
+        by utilizing the `IndexGenerator` module.
+
+        ## Args
+        - **index_name** (`str`): The name of the index to be generated.
+        - **table_ids** (`list[str] | tuple[str]`): The IDs of tables to be indexed
+        (to be exact, their content summaries & context/metadata).
+
+        ## Returns
+        - `str`: A JSON string representing the result of the process (`Response`).
+        """
         if self.index_generator is None:
             self.__init_index_generator()
         return self.index_generator.generate_index(index_name, table_ids)

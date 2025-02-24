@@ -143,7 +143,7 @@ class Summarizer:
                     summary_ids.append(
                         connection.sql(
                             f"""INSERT INTO table_summaries (table_id, summary, summary_type)
-                            VALUES ('{table_id}', '{narration_payload}', '{SummaryType.NARRATION}')
+                            VALUES ('{table_id}', '{narration_payload}', '{SummaryType.COLUMN_NARRATION}')
                             RETURNING id"""
                         ).fetchone()[0]
                     )
@@ -154,7 +154,7 @@ class Summarizer:
                     summary_ids.append(
                         connection.sql(
                             f"""INSERT INTO table_summaries (table_id, summary, summary_type)
-                            VALUES ('{table_id}', '{row_payload}', '{SummaryType.ROW_SUMMARY}')
+                            VALUES ('{table_id}', '{row_payload}', '{SummaryType.ROW_SAMPLE}')
                             RETURNING id"""
                         ).fetchone()[0]
                     )
@@ -202,7 +202,7 @@ class Summarizer:
                         summary_ids.append(
                             connection.sql(
                                 f"""INSERT INTO table_summaries (table_id, summary, summary_type)
-                                VALUES ('{table_id}', '{narration_payload}', '{SummaryType.NARRATION}')
+                                VALUES ('{table_id}', '{narration_payload}', '{SummaryType.COLUMN_NARRATION}')
                                 RETURNING id"""
                             ).fetchone()[0]
                         )
@@ -213,7 +213,7 @@ class Summarizer:
                         summary_ids.append(
                             connection.sql(
                                 f"""INSERT INTO table_summaries (table_id, summary, summary_type)
-                                VALUES ('{table_id}', '{row_payload}', '{SummaryType.ROW_SUMMARY}')
+                                VALUES ('{table_id}', '{row_payload}', '{SummaryType.ROW_SAMPLE}')
                                 RETURNING id"""
                             ).fetchone()[0]
                         )

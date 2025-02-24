@@ -1,3 +1,9 @@
+"""
+index_generator.py
+
+This module provides indexing functionality for content summaries & context (metadata).
+"""
+
 import json
 import logging
 import os
@@ -27,6 +33,26 @@ logger = logging.getLogger("IndexGenerator")
 
 
 class IndexGenerator:
+    """
+    Generates indexes for content summaries and context (metadata) associated
+    with tables.
+
+    This class provides a method to create hybrid---vector & full-text---indexes
+    that helps efficiently organize information to be queried later.
+
+    ## Attributes
+    - **embedding_model** (`OpenAI | SentenceTransformer`): The model used for
+    text embeddings.
+    - **db_path** (`str`): Path to the database file for retrieving content
+    summaries & context.
+    - **index_path** (`str`): Path to the directory where indexes are stored.
+    - **stemmer** (`Stemmer`): A stemming tool used for text normalization.
+    - **vector_index_path** (`str`): Path for vector-based indexing.
+    - **fulltext_index_path** (`str`): Path for full-text search indexing.
+    - **EMBEDDING_MAX_TOKENS** (`int`): The maximum number of tokens the embedding
+    model supports (hard-coded to 512 for local models and 8191 for OpenAI models).
+    """
+
     def __init__(
         self,
         embed_model: OpenAI | SentenceTransformer,
@@ -51,7 +77,20 @@ class IndexGenerator:
         else:
             self.EMBEDDING_MAX_TOKENS = 512
 
-    def generate_index(self, index_name: str, table_ids: list | tuple = None) -> str:
+    def generate_index(
+        self, index_name: str, table_ids: list[str] | tuple[str] = None
+    ) -> str:
+        """
+        Generates a hybrid index with name `index_name` for a given `table_ids`.
+
+        ## Args
+        - **index_name** (`str`): The name of the index to be generated.
+        - **table_ids** (`list[str] | tuple[str]`): The IDs of tables to be indexed
+        (to be exact, their content summaries & context/metadata).
+
+        ## Returns
+        - `str`: A JSON string representing the result of the process (`Response`).
+        """
         try:
             with duckdb.connect(self.db_path) as connection:
                 chroma_client = PersistentClient(self.vector_index_path)
@@ -65,12 +104,10 @@ class IndexGenerator:
                             "SELECT id FROM table_status"
                         ).fetchall()
                     ]
-                elif isinstance(table_ids, str):
-                    table_ids = (table_ids,)
 
                 logger.info(f"Generating index for {len(table_ids)} tables")
 
-                # Generate & insert tables to vector index
+                # Step 1a: Generate vector index
                 start_time = time.time()
                 vector_index_response = self.__generate_vector_index(
                     index_name, chroma_client
@@ -80,21 +117,20 @@ class IndexGenerator:
                 if vector_index_response.status == ResponseStatus.ERROR:
                     return vector_index_response.to_json()
 
-                vector_index_id = vector_index_response.data["index_id"]
-                chroma_collection = vector_index_response.data["collection"]
-
+                vector_index_id: int = vector_index_response.data["index_id"]
+                chroma_collection: Collection = vector_index_response.data["collection"]
                 logger.info(vector_index_response.message)
-                vector_insert_response = self.__insert_tables_to_vector_index(
+
+                # Step 1b: Insert documents associated with the tables to the vector index
+                vector_insert_response = self.__insert_documents_to_vector_index(
                     vector_index_id, table_ids, chroma_collection
                 )
-
                 if vector_insert_response.status == ResponseStatus.ERROR:
                     chroma_client.delete_collection(index_name)
                     return vector_insert_response.to_json()
-
                 logger.info(vector_insert_response.message)
 
-                # Generate & insert tables to fulltext index
+                # Step 2a: Generate full-text index
                 start_time = time.time()
                 fulltext_index_response = self.__generate_fulltext_index(index_name)
                 end_time = time.time()
@@ -103,23 +139,22 @@ class IndexGenerator:
                     chroma_client.delete_collection(index_name)
                     return fulltext_index_response.to_json()
 
-                fulltext_index_id = fulltext_index_response.data["index_id"]
-                retriever = fulltext_index_response.data["retriever"]
-
+                fulltext_index_id: int = fulltext_index_response.data["index_id"]
+                retriever: bm25s.BM25 = fulltext_index_response.data["retriever"]
                 logger.info(fulltext_index_response.message)
-                fulltext_insert_response = self.__insert_tables_to_fulltext_index(
+
+                # Step 2b: Insert documents associated with the tables to the FT index
+                fulltext_insert_response = self.__insert_documents_to_fulltext_index(
                     fulltext_index_id, table_ids, retriever
                 )
-
                 if fulltext_insert_response.status == ResponseStatus.ERROR:
                     chroma_client.delete_collection(index_name)
                     return fulltext_insert_response.to_json()
-
                 logger.info(fulltext_insert_response.message)
 
                 return Response(
                     status=ResponseStatus.SUCCESS,
-                    message=f"Vector and fulltext index named {index_name} with id {vector_index_id}"
+                    message=f"A hybrid index named {index_name} with id {vector_index_id}"
                     f" and {fulltext_index_id} has been created with {len(table_ids)} tables.",
                     data={
                         "table_ids": table_ids,
@@ -138,6 +173,16 @@ class IndexGenerator:
     def __generate_vector_index(
         self, index_name: str, chroma_client: ClientAPI
     ) -> Response:
+        """
+        Generates a vector index with name `index_name` using `ChromaDB-Deterministic`.
+
+        ## Args
+        - **index_name** (`str`): The name of the index to be generated.
+        - **chroma_client** (`ClientAPI`): A Client API for `ChromaDB-Deterministic`.
+
+        ## Returns
+        - `Response`: A `Response` object of the process.
+        """
         try:
             chroma_collection = chroma_client.create_collection(
                 name=index_name,
@@ -173,33 +218,44 @@ class IndexGenerator:
             return Response(
                 status=ResponseStatus.ERROR,
                 message=f"Error connecting to database: {e}",
-            ).to_json()
+            )
 
-    def __insert_tables_to_vector_index(
+    def __insert_documents_to_vector_index(
         self,
         index_id: int,
-        table_ids: list | tuple,
+        table_ids: list[str] | tuple[str],
         chroma_collection: Collection,
     ) -> Response:
+        """
+        Inserts documents (related to the tables associated with `table_ids`) into
+        a vector index.
+
+        ## Args
+        - **index_id** (`int`): The database ID of the vector index.
+        - **table_ids** (`list[str] | tuple[str]`): The IDs of tables to be indexed
+        (to be exact, their content summaries & context/metadata).
+        - **chroma_collection** (`Collection`): The vector index.
+
+        ## Returns
+        - `Response`: A `Response` object of the process.
+        """
         documents = []
         ids = []
 
         for table_id in table_ids:
             logger.info(f"Processing table {table_id}")
 
-            narration_summaries = self.__get_table_summaries(
-                table_id, SummaryType.NARRATION
+            column_narrations = self.__get_content_summaries(
+                table_id, SummaryType.COLUMN_NARRATION
             )
-            row_summaries = self.__get_table_summaries(
-                table_id, SummaryType.ROW_SUMMARY
-            )
+            row_samples = self.__get_content_summaries(table_id, SummaryType.ROW_SAMPLE)
 
-            for idx, narration_summary in enumerate(narration_summaries):
-                documents.append(json.loads(narration_summary[1])["payload"])
+            for idx, column_narration in enumerate(column_narrations):
+                documents.append(json.loads(column_narration[1])["payload"])
                 ids.append(f"{table_id}_SEP_contents_SEP_schema-{idx}")
 
-            for idx, row_summary in enumerate(row_summaries):
-                documents.append(json.loads(row_summary[1])["payload"])
+            for idx, row_sample in enumerate(row_samples):
+                documents.append(json.loads(row_sample[1])["payload"])
                 ids.append(f"{table_id}_SEP_contents_SEP_row-{idx}")
 
             contexts = self.__get_table_contexts(table_id)
@@ -258,7 +314,7 @@ class IndexGenerator:
             return Response(
                 status=ResponseStatus.ERROR,
                 message=f"Error connecting to database: {e}",
-            ).to_json()
+            )
 
         return Response(
             status=ResponseStatus.SUCCESS,
@@ -266,6 +322,15 @@ class IndexGenerator:
         )
 
     def __generate_fulltext_index(self, index_name: str):
+        """
+        Generates a full-text index with name `index_name` using `BM25s`.
+
+        ## Args
+        - **index_name** (`str`): The name of the index to be generated.
+
+        ## Returns
+        - `Response`: A `Response` object of the process.
+        """
         try:
             with duckdb.connect(self.db_path) as connection:
                 retriever = bm25s.BM25(corpus=[])
@@ -293,11 +358,24 @@ class IndexGenerator:
             return Response(
                 status=ResponseStatus.ERROR,
                 message=f"Error connecting to database: {e}",
-            ).to_json()
+            )
 
-    def __insert_tables_to_fulltext_index(
+    def __insert_documents_to_fulltext_index(
         self, index_id: int, table_ids: list | tuple, retriever: bm25s.BM25
     ):
+        """
+        Inserts documents (related to the tables associated with `table_ids`) into
+        a full-text index.
+
+        ## Args
+        - **index_id** (`int`): The database ID of the full-text index.
+        - **table_ids** (`list[str] | tuple[str]`): The IDs of tables to be indexed
+        (to be exact, their content summaries & context/metadata).
+        - **retriever** (`BM25`): The full-text index.
+
+        ## Returns
+        - `Response`: A `Response` object of the process.
+        """
         try:
             with duckdb.connect(self.db_path) as connection:
                 index_name = connection.sql(
@@ -308,16 +386,16 @@ class IndexGenerator:
                 for table_id in table_ids:
                     logger.info(f"Processing table {table_id}")
 
-                    narration_summaries = self.__get_table_summaries(
-                        table_id, SummaryType.NARRATION
+                    column_narrations = self.__get_content_summaries(
+                        table_id, SummaryType.COLUMN_NARRATION
                     )
 
-                    row_summaries = self.__get_table_summaries(
-                        table_id, SummaryType.ROW_SUMMARY
+                    row_samples = self.__get_content_summaries(
+                        table_id, SummaryType.ROW_SAMPLE
                     )
 
-                    for idx, narration_summary in enumerate(narration_summaries):
-                        content = json.loads(narration_summary[1])["payload"]
+                    for idx, column_narration in enumerate(column_narrations):
+                        content = json.loads(column_narration[1])["payload"]
                         corpus_json.append(
                             {
                                 "text": content,
@@ -327,8 +405,8 @@ class IndexGenerator:
                             }
                         )
 
-                    for idx, row_summary in enumerate(row_summaries):
-                        content = json.loads(row_summary[1])["payload"]
+                    for idx, row_sample in enumerate(row_samples):
+                        content = json.loads(row_sample[1])["payload"]
                         corpus_json.append(
                             {
                                 "text": content,
@@ -389,9 +467,19 @@ class IndexGenerator:
             return Response(
                 status=ResponseStatus.ERROR,
                 message=f"Error connecting to database: {e}",
-            ).to_json()
+            )
 
     def __get_table_contexts(self, table_id: str) -> list[tuple[str, str]]:
+        """
+        Retrieves all contexts (metadata) associated with `table_id` from the
+        database.
+
+        ## Args
+        - **table_id** (`str`): The ID of the table in the database.
+
+        ## Returns
+        - `list[tuple[str, str]]`: The contexts and their associated IDs.
+        """
         try:
             with duckdb.connect(self.db_path) as connection:
                 table_id = table_id.replace("'", "''")
@@ -400,10 +488,7 @@ class IndexGenerator:
                     WHERE table_id='{table_id}'"""
                 ).fetchall()
         except Exception as e:
-            return Response(
-                status=ResponseStatus.ERROR,
-                message=f"Error connecting to database: {e}",
-            ).to_json()
+            logger.error(f"Error connecting to database: {e}")
 
     def __merge_contexts(self, contexts: list[tuple[str, str]]) -> list[str]:
         if isinstance(self.embedding_model, OpenAI):
@@ -431,9 +516,21 @@ class IndexGenerator:
 
         return processed_contexts
 
-    def __get_table_summaries(
+    def __get_content_summaries(
         self, table_id: str, summary_type: SummaryType
     ) -> list[tuple[str, str]]:
+        """
+        Retrieves all content summaries associated with `table_id` from the
+        database.
+
+        ## Args
+        - **table_id** (`str`): The ID of the table in the database.
+        - **summary_type** (`SummaryType`): The type of summaries to be retrieved
+        (either column narration or row sample).
+
+        ## Returns
+        - `list[tuple[str, str]]`: The content summaries and their associated IDs.
+        """
         try:
             with duckdb.connect(self.db_path) as connection:
                 table_id = table_id.replace("'", "''")
@@ -442,10 +539,7 @@ class IndexGenerator:
                     WHERE table_id='{table_id}' AND summary_type='{summary_type}'"""
                 ).fetchall()
         except Exception as e:
-            return Response(
-                status=ResponseStatus.ERROR,
-                message=f"Error connecting to database: {e}",
-            ).to_json()
+            logger.error(f"Error connecting to database: {e}")
 
 
 if __name__ == "__main__":
