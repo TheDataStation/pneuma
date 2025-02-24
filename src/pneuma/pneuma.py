@@ -21,7 +21,6 @@ from pneuma.registrar.registrar import Registrar
 from pneuma.summarizer.summarizer import Summarizer
 from pneuma.utils.logging_config import configure_logging
 from pneuma.utils.pipeline_initializer import initialize_pipeline
-from pneuma.utils.storage_config import get_storage_path
 
 configure_logging()
 logger = logging.getLogger("Pneuma")
@@ -69,12 +68,12 @@ class Pneuma:
         max_llm_batch_size: int = 50,
     ):
         if out_path is None:
-            out_path = get_storage_path()
+            out_path = os.path.join(os.getcwd(), "pneuma-out")
         os.makedirs(out_path, exist_ok=True)
 
-        self.out_path = out_path
-        self.db_path = os.path.join(out_path, "storage.db")
-        self.index_location = os.path.join(out_path, "indexes")
+        self.out_path = os.path.abspath(out_path)
+        self.db_path = os.path.join(self.out_path, "storage.db")
+        self.index_path = os.path.join(self.out_path, "indexes")
 
         self.hf_token = hf_token
         self.openai_api_key = openai_api_key
@@ -123,7 +122,7 @@ class Pneuma:
         self.index_generator = IndexGenerator(
             embed_model=self.embed_model,
             db_path=self.db_path,
-            index_path=self.index_location,
+            index_path=self.index_path,
         )
 
     def __init_query_processor(self):
@@ -133,8 +132,7 @@ class Pneuma:
         self.query_processor = QueryProcessor(
             llm=self.llm,
             embed_model=self.embed_model,
-            db_path=self.db_path,
-            index_path=self.index_location,
+            index_path=self.index_path,
         )
 
     def __init_llm(self):

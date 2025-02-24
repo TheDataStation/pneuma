@@ -2,7 +2,6 @@ import gc
 import json
 import logging
 import math
-import os
 from collections import defaultdict
 
 import duckdb
@@ -11,7 +10,9 @@ import pandas as pd
 import tiktoken
 import torch
 from openai import OpenAI
+from sentence_transformers import SentenceTransformer
 from tqdm import tqdm
+from transformers import TextGenerationPipeline
 
 from pneuma.utils.logging_config import configure_logging
 from pneuma.utils.prompting_interface import (
@@ -20,7 +21,6 @@ from pneuma.utils.prompting_interface import (
     prompt_pipeline_robust,
 )
 from pneuma.utils.response import Response, ResponseStatus
-from pneuma.utils.storage_config import get_storage_path
 from pneuma.utils.summary_types import SummaryType
 from pneuma.utils.table_status import TableStatus
 
@@ -31,9 +31,9 @@ logger = logging.getLogger("Summarizer")
 class Summarizer:
     def __init__(
         self,
-        llm,
-        embed_model,
-        db_path: str = os.path.join(get_storage_path(), "storage.db"),
+        llm: OpenAI | TextGenerationPipeline,
+        embed_model: OpenAI | SentenceTransformer,
+        db_path: str,
         max_llm_batch_size: int = 50,
     ):
         self.db_path = db_path

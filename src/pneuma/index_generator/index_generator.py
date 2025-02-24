@@ -25,7 +25,6 @@ from tqdm import tqdm
 from pneuma.utils.logging_config import configure_logging
 from pneuma.utils.prompting_interface import prompt_openai_embed
 from pneuma.utils.response import Response, ResponseStatus
-from pneuma.utils.storage_config import get_storage_path
 from pneuma.utils.summary_types import SummaryType
 
 configure_logging()
@@ -56,19 +55,13 @@ class IndexGenerator:
     def __init__(
         self,
         embed_model: OpenAI | SentenceTransformer,
-        db_path: str = None,
-        index_path: str = None,
+        db_path: str,
+        index_path: str,
     ):
-        if db_path is None:
-            db_path = os.path.join(get_storage_path(), "storage.db")
-        if index_path is None:
-            index_path = os.path.join(os.path.dirname(db_path), "indexes")
-
         self.embedding_model = embed_model
         self.db_path = db_path
         self.index_path = index_path
         self.stemmer = Stemmer.Stemmer("english")
-
         self.vector_index_path = os.path.join(index_path, "vector")
         self.fulltext_index_path = os.path.join(index_path, "fulltext")
 

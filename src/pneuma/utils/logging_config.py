@@ -1,20 +1,19 @@
 import logging
 import os
 
-from .storage_config import get_storage_path
 
-
-def configure_logging():
-    os.makedirs(get_storage_path(), exist_ok=True)
+def configure_logging(logger_level: str = logging.INFO):
+    LOGGER_LOCATION = os.path.join(os.getcwd(), ".pneuma")
+    os.makedirs(LOGGER_LOCATION, exist_ok=True)
     logger = logging.getLogger()
     if logger.hasHandlers():
         logger.handlers.clear()
 
     logging.basicConfig(
-        level=logging.INFO,
+        level=logger_level,
         format="%(asctime)s [%(name)s] [%(levelname)s] %(message)s",
         handlers=[
-            logging.FileHandler(os.path.join(get_storage_path(), "pneuma.log")),
+            logging.FileHandler(os.path.join(LOGGER_LOCATION, "pneuma.log")),
             logging.StreamHandler(),
         ],
     )

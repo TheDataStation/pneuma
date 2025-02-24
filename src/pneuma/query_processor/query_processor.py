@@ -27,7 +27,6 @@ from pneuma.utils.prompting_interface import (
     prompt_pipeline,
 )
 from pneuma.utils.response import Response, ResponseStatus
-from pneuma.utils.storage_config import get_storage_path
 
 configure_logging()
 logger = logging.getLogger("Registrar")
@@ -45,8 +44,6 @@ class QueryProcessor:
     - **embedding_model** (`OpenAI | SentenceTransformer`): The model used for
     text embeddings.
     - **stemmer** (`Stemmer`): A stemming tool used for text normalization.
-    - **db_path** (`str`): Path to the database file for retrieving content
-    summaries & context.
     - **index_path** (`str`): Path to the directory where indexes are stored.
     - **vector_index_path** (`str`): Path for vector-based indexing.
     - **fulltext_index_path** (`str`): Path for full-text search indexing.
@@ -56,18 +53,11 @@ class QueryProcessor:
         self,
         llm: OpenAI | TextGenerationPipeline,
         embed_model: OpenAI | SentenceTransformer,
-        db_path: str = None,
-        index_path: str = None,
+        index_path: str,
     ):
         self.pipe = llm
         self.embedding_model = embed_model
         self.stemmer = Stemmer.Stemmer("english")
-
-        if db_path is None:
-            db_path = os.path.join(get_storage_path(), "storage.db")
-        if index_path is None:
-            index_path = os.path.join(os.path.dirname(db_path), "indexes")
-
         self.vector_index_path = os.path.join(index_path, "vector")
         self.fulltext_index_path = os.path.join(index_path, "fulltext")
 

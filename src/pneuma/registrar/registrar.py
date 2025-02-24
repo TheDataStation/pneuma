@@ -8,8 +8,6 @@ import pandas as pd
 
 from pneuma.utils.logging_config import configure_logging
 from pneuma.utils.response import Response, ResponseStatus
-from pneuma.utils.storage_config import get_storage_path
-from pneuma.utils.summary_types import SummaryType
 from pneuma.utils.table_status import TableStatus
 
 configure_logging()
@@ -17,9 +15,7 @@ logger = logging.getLogger("Registrar")
 
 
 class Registrar:
-    def __init__(self, db_path: str = None):
-        if db_path is None:
-            db_path = os.path.join(get_storage_path(), "storage.db")
+    def __init__(self, db_path: str):
         os.makedirs(os.path.dirname(db_path), exist_ok=True)
         self.db_path = db_path
 
@@ -274,7 +270,7 @@ class Registrar:
             return Response(
                 status=ResponseStatus.ERROR,
                 message=f"Error connecting to database: {e}",
-            ).to_json()
+            )
 
     def __read_table_folder(
         self, folder_path: str, creator: str, accept_duplicates: bool = False
@@ -314,18 +310,11 @@ class Registrar:
                     "payload": metadata_content.strip(),
                 }
 
-                if metadata_type == "context":
-                    metadata_id = connection.sql(
-                        f"""INSERT INTO table_contexts (table_id, context)
-                        VALUES ('{table_id}', '{json.dumps(payload)}')
-                        RETURNING id"""
-                    ).fetchone()[0]
-                elif metadata_type == "summary":
-                    metadata_id = connection.sql(
-                        f"""INSERT INTO table_summaries (table_id, summary, summary_type)
-                        VALUES ('{table_id}', '{json.dumps(payload)}', '{SummaryType.USER_GENERATED}')
-                        RETURNING id"""
-                    ).fetchone()[0]
+                metadata_id = connection.sql(
+                    f"""INSERT INTO table_contexts (table_id, context)
+                    VALUES ('{table_id}', '{json.dumps(payload)}')
+                    RETURNING id"""
+                ).fetchone()[0]
 
                 return Response(
                     status=ResponseStatus.SUCCESS,
@@ -336,7 +325,7 @@ class Registrar:
             return Response(
                 status=ResponseStatus.ERROR,
                 message=f"Error connecting to database: {e}",
-            ).to_json()
+            )
 
     def __read_metadata_file(
         self, metadata_path: str, metadata_type: str, table_id: str
