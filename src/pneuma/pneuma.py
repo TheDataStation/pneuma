@@ -1,6 +1,12 @@
+"""
+pneuma.py
+
+This module serves as an entry point to use `Pneuma`, an LLM-based data discovery
+system for tabular data.
+"""
 import logging
 import os
-from typing import Any, Optional
+from typing import Optional
 
 import fire
 from huggingface_hub import login
@@ -22,6 +28,36 @@ logger = logging.getLogger("Pneuma")
 
 
 class Pneuma:
+    """
+    The entry point of `Pneuma`, combining all modules for ther purpose of LLM-based
+    table discovery.
+
+    This class provides end-to-end methods from indexing tables (and their metadata,
+    if any) to retrieving tables given users' queries.
+
+    ## Attributes
+    - **out_path** (`str`): The output folder of Pneuma.
+    - **db_path** (`str`): The database path within the output folder of Pneuma.
+    - **index_location** (`str`): The index path within the output folder of Pneuma.
+    - **hf_token** (`str`): A HuggingFace User Access Tokens.
+    - **openai_api_key** (`str`): An OpenAI API key.
+    - **use_local_model** (`bool`): The option to use local or third-party models
+    (for now, OpenAI models only as both LLM and embedding model).
+    - **llm_path** (`str`): The path or name of a local LLM from HuggingFace.
+    - **embed_path** (`str`): The path or name of a local embedding model from
+    HuggingFace.
+    - **max_llm_batch_size** (`int`): Maximum batch size for the dynamic batch
+    size selector to explore.
+    - **registrar** (`Registrar`): The dataset regisration module.
+    - **summarizer** (`Summarizer`): The dataset summarizer module.
+    - **index_generator** (`IndexGenerator`): The index generator module.
+    - **query_processor** (`QueryProcessor`): The query processor module.
+    - **llm** (`OpenAI | TextGenerationPipeline`): The actual LLM (lazily
+    initialized).
+    - **embed_model** (`OpenAI | SentenceTransformer`): The actual embedding model
+    (lazily initialized).
+    """
+
     def __init__(
         self,
         out_path: Optional[str] = None,
@@ -91,6 +127,7 @@ class Pneuma:
         )
 
     def __init_query_processor(self):
+        """Initializes the QueryProcessor module."""
         self.__init_llm()
         self.__init_embed_model()
         self.query_processor = QueryProcessor(
@@ -101,6 +138,7 @@ class Pneuma:
         )
 
     def __init_llm(self):
+        """Initializes the LLM."""
         if self.llm is None:
             if self.use_local_model:
                 self.llm = initialize_pipeline(
@@ -115,6 +153,7 @@ class Pneuma:
                 self.llm = OpenAI(api_key=self.openai_api_key)
 
     def __init_embed_model(self):
+        """Initializes the embedding model."""
         if self.embed_model is None:
             if self.use_local_model:
                 self.embed_model = SentenceTransformer(self.embed_path)
@@ -122,6 +161,7 @@ class Pneuma:
                 self.embed_model = OpenAI(api_key=self.openai_api_key)
 
     def setup(self) -> str:
+        """Setup Pneuma through its `Registrar` module."""
         if self.registrar is None:
             self.__init_registrar()
         return self.registrar.setup()
@@ -136,6 +176,12 @@ class Pneuma:
         s3_secret_access_key: str = None,
         accept_duplicates: bool = False,
     ) -> str:
+        """
+        Registers tables into the database by utilizing the `Registrar` module.
+
+        ## Returns
+        - `str`: A JSON string representing the result of the process (`Response`).
+        """
         if self.registrar is None:
             self.__init_registrar()
         return self.registrar.add_tables(
@@ -154,19 +200,30 @@ class Pneuma:
         metadata_type: str = "",
         table_id: str = "",
     ) -> str:
+        """
+        Registers metadata into the database by utilizing the `Registrar` module.
+
+        ## Returns
+        - `str`: A JSON string representing the result of the process (`Response`).
+        """
         if self.registrar is None:
             self.__init_registrar()
         return self.registrar.add_metadata(metadata_path, metadata_type, table_id)
 
-    def summarize(self, table_id: str = "") -> str:
+    def summarize(self, table_id: str = None) -> str:
+        """
+        Summarizes the contents of all unsummarized tables or a specific table
+        if `table_id` is provided using the `Summarizer` module.
+
+        ## Args
+        - **table_id** (`str`): The specific table ID to be summarized.
+
+        ## Returns
+        - `str`: A JSON string representing the result of the process (`Response`).
+        """
         if self.summarizer is None:
             self.__init_summarizer()
         return self.summarizer.summarize(table_id)
-
-    def purge_tables(self) -> str:
-        if self.summarizer is None:
-            self.__init_summarizer()
-        return self.summarizer.purge_tables()
 
     def generate_index(
         self, index_name: str, table_ids: list[str] | tuple[str] = None

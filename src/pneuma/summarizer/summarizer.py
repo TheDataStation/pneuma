@@ -47,6 +47,16 @@ class Summarizer:
             self.EMBEDDING_MAX_TOKENS = 512
 
     def summarize(self, table_id: str = None) -> str:
+        """
+        Summarizes the contents of all unsummarized tables or a specific table
+        if `table_id` is provided.
+
+        ## Args
+        - **table_id** (`str`): The specific table ID to be summarized.
+
+        ## Returns
+        - `str`: A JSON string representing the result of the process (`Response`).
+        """
         try:
             with duckdb.connect(self.db_path) as connection:
                 if table_id is None or table_id == "":
@@ -78,37 +88,6 @@ class Summarizer:
                     message=f"Total of {len(all_summary_ids)} summaries has been added "
                     f"with IDs: {', '.join([str(summary_id) for summary_id in all_summary_ids])}.\n",
                     data={"table_ids": table_ids, "summary_ids": all_summary_ids},
-                ).to_json()
-        except Exception as e:
-            return Response(
-                status=ResponseStatus.ERROR,
-                message=f"Error connecting to database: {e}",
-            ).to_json()
-
-    def purge_tables(self) -> str:
-        try:
-            with duckdb.connect(self.db_path) as connection:
-                summarized_table_ids = [
-                    entry[0]
-                    for entry in connection.sql(
-                        f"SELECT id FROM table_status WHERE status = '{TableStatus.SUMMARIZED}'"
-                    ).fetchall()
-                ]
-
-                for table_id in summarized_table_ids:
-                    logger.info(f"Dropping table with ID {table_id}")
-                    # Escape single quotes to avoid breaking the SQL query
-                    table_id = table_id.replace("'", "''")
-                    connection.sql(f'DROP TABLE "{table_id}"')
-                    connection.sql(
-                        f"""UPDATE table_status
-                        SET status = '{TableStatus.DELETED}'
-                        WHERE id = '{table_id}'"""
-                    )
-
-                return Response(
-                    status=ResponseStatus.SUCCESS,
-                    message=f"Total of {len(summarized_table_ids)} tables have been purged.\n",
                 ).to_json()
         except Exception as e:
             return Response(

@@ -1,3 +1,8 @@
+"""
+query_processor.py
+
+This module provides query functionality for users' queries.
+"""
 import logging
 import os
 
