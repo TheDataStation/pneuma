@@ -12,7 +12,6 @@
         - __process_nodes_vec
         - __rerank
         - __get_relevance_prompt
-        - 
       show_root_heading: true
       show_source: false
       show_bases: true

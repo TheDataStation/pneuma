@@ -18,7 +18,6 @@
         - __init_query_processor
         - __init_llm
         - __init_embed_model
-        - 
       show_root_heading: true
       show_source: false
       show_bases: true
