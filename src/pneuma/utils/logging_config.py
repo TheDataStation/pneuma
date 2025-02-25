@@ -3,6 +3,12 @@ import os
 
 
 def configure_logging(logger_level: str = logging.INFO):
+    """
+    Configures logging functionality across Pneuma's modules.
+
+    ## Args
+    - **logger_level** (int): The minimum level of log messages to be shown.
+    """
     LOGGER_LOCATION = os.path.join(os.getcwd(), ".pneuma")
     os.makedirs(LOGGER_LOCATION, exist_ok=True)
     logger = logging.getLogger()
