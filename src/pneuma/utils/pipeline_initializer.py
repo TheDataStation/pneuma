@@ -1,3 +1,8 @@
+"""
+pipeline_initializer.py
+
+This module provides HuggingFace-based LLM pipeline initialization functionality.
+"""
 from torch import dtype
 from transformers import pipeline
 
@@ -6,16 +11,15 @@ def initialize_pipeline(
     model_path: str, torch_dtype: dtype, context_length=8192,
 ):
     """
-    Initialize a text generation pipeline
+    Initializes a HuggingFace text generation pipeline.
 
-    ### Parameters:
-    - model_path (str): The path of a model for the pipeline
-    - torch_dtype (dtype): The data type of the model
-    - context_length (int): The context length of the model
-    - hf_token (str): HuggingFace token to access gated model
+    ## Args
+    - **model_path** (str): The path of an LLM for the pipeline.
+    - **torch_dtype** (dtype): The data type of the LLM.
+    - **context_length** (int): The context length of the LLM.
 
-    ### Returns:
-    - pipe (TextGenerationPipeline): The pipeline for text generation
+    ## Returns
+    - `TextGenerationPipeline`: The pipeline for text generation.
     """
     pipe = pipeline(
         "text-generation",
