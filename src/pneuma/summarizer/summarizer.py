@@ -35,6 +35,23 @@ logger = logging.getLogger("Summarizer")
 
 
 class Summarizer:
+    """
+    Summarizes indexed tables in the database.
+
+    This class provides a method to summarize indexed tables in the database
+    to represent them for retrieval purposes.
+
+    ## Attributes
+    - **pipe** (`OpenAI | TextGenerationPipeline`): The LLM pipeline for inference.
+    - **embedding_model** (`OpenAI | SentenceTransformer`): The model used for
+    text embeddings.
+    - **db_path** (`str`): Path to the database file for retrieving content
+    summaries & context.
+    - **MAX_LLM_BATCH_SIZE** (`int`): The upper bound of batch size value to
+    explore dynamically for LLM inference.
+    - **EMBEDDING_MAX_TOKENS** (`int`): The maximum number of tokens the embedding
+    model supports (hard-coded to 512 for local models and 8191 for OpenAI models).
+    """
     def __init__(
         self,
         llm: OpenAI | TextGenerationPipeline,
@@ -42,23 +59,6 @@ class Summarizer:
         db_path: str,
         max_llm_batch_size: int = 50,
     ):
-        """
-        Summarizes indexed tables in the database.
-
-        This class provides a method to summarize indexed tables in the database
-        to represent them for retrieval purposes.
-
-        ## Attributes
-        - **pipe** (`OpenAI | TextGenerationPipeline`): The LLM pipeline for inference.
-        - **embedding_model** (`OpenAI | SentenceTransformer`): The model used for
-        text embeddings.
-        - **db_path** (`str`): Path to the database file for retrieving content
-        summaries & context.
-        - **MAX_LLM_BATCH_SIZE** (`int`): The upper bound of batch size value to
-        explore dynamically for LLM inference.
-        - **EMBEDDING_MAX_TOKENS** (`int`): The maximum number of tokens the embedding
-        model supports (hard-coded to 512 for local models and 8191 for OpenAI models).
-        """
         self.db_path = db_path
         self.pipe = llm
         self.embedding_model = embed_model

@@ -1,0 +1,41 @@
+site_name: Pneuma
+site_url: https://pneuma.github.io
+repo_url: https://github.com/TheDataStation/pneuma
+repo_name: TheDataStation/pneuma
+
+nav:
+  - Getting Started:
+    - Overview: index.md
+    - Installation: getting-started/installation.md
+    - Quick Start Tutorial: getting-started/quickstart.md
+  - API Reference:
+    - Overview: api/reference.md
+    - Registrar: api/registrar.md
+    - Summarizer: api/summarizer.md
+    - IndexGenerator: api/index_generator.md
+    - QueryProcessor: api/query_processor.md
+
+theme:
+  name: material
+  palette:
+    scheme: default
+    primary: custom
+    accent: custom
+  font:
+    text: Open Sans
+  features:
+    - header.autohide
+    - navigation.tabs
+    - navigation.instant
+    - navigation.footer
+
+extra_css:
+  - stylesheets/extra.css
+
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [../src]
+
+copyright: Copyright &copy; 2025 Pneuma Team

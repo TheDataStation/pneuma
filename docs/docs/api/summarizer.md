@@ -1,0 +1,29 @@
+::: pneuma.summarizer.Summarizer
+    handler: python
+    options:
+      heading: Summarizer
+      docstring_style: google
+      members:
+        - __init__
+        - summarize
+        - __summarize_table_by_id
+        - __batch_summarize_tables
+        - __generate_column_narrations
+        - __batch_generate_column_narrations
+        - __get_col_narration_prompt
+        - __get_optimal_batch_size
+        - __is_fit_in_memory
+        - __get_special_indices
+        - __block_column_narrations
+        - __generate_row_samples
+        - __block_row_samples
+      show_root_heading: true
+      show_source: false
+      show_bases: true
+      line_length: 80
+      separate_signature: true
+      show_signature_annotations: true
+      show_symbol_type_heading: true
+      show_symbol_type_toc: true
+      heading_level: 3
+      docstring_section_style: list
