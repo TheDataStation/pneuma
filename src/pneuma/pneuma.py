@@ -195,7 +195,6 @@ class Pneuma:
     def add_metadata(
         self,
         metadata_path: str,
-        metadata_type: str = "",
         table_id: str = "",
     ) -> str:
         """
@@ -206,7 +205,7 @@ class Pneuma:
         """
         if self.registrar is None:
             self.__init_registrar()
-        return self.registrar.add_metadata(metadata_path, metadata_type, table_id)
+        return self.registrar.add_metadata(metadata_path, table_id)
 
     def summarize(self, table_id: str = None) -> str:
         """

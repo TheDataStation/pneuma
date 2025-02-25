@@ -1,3 +1,8 @@
+"""
+registrar.py
+
+This module handles dataset registration functionality.
+"""
 import json
 import logging
 import os
@@ -15,11 +20,27 @@ logger = logging.getLogger("Registrar")
 
 
 class Registrar:
+    """
+    Registers dataset and its context (metadata) to the database.
+
+    This class provides methods to setup the registration system and to
+    register tables & context (metadata).
+
+    ## Attributes
+    - **db_path** (`str`): Path to the database file for retrieving content
+    summaries & context.
+    """
     def __init__(self, db_path: str):
         os.makedirs(os.path.dirname(db_path), exist_ok=True)
         self.db_path = db_path
 
     def setup(self) -> str:
+        """
+        Setups the database system for registration purposes.
+
+        ## Returns
+        - `str`: A JSON string representing the result of the process (`Response`).
+        """
         try:
             with duckdb.connect(self.db_path) as connection:
                 connection.execute("INSTALL httpfs")
@@ -120,6 +141,22 @@ class Registrar:
         s3_secret_access_key: str = None,
         accept_duplicates: bool = False,
     ) -> str:
+        """
+        Adds tables into the database.
+
+        ## Args
+        - **path** (`str`): The path to a specific table file/folder (`CSV` or
+        `parquet`).
+        - **creator** (`str`): The creator of the file.
+        - **source** (`str`): The dataset source (either `file` or `s3`).
+        - **s3_region** (`int`): Amazon S3 region.
+        - **s3_access_key** (`int`): Amazon S3 access key.
+        - **s3_secret_access_key** (`int`): Amazon S3 secret access key.
+        - **accept_duplicates** (`bool`): Option to accept duplicate tables or not.
+
+        ## Returns
+        - `str`: A JSON string representing the result of the process (`Response`).
+        """
         if source not in ["file", "s3"]:
             return "Invalid source. Please use 'file' or 's3'."
 
@@ -150,15 +187,26 @@ class Registrar:
         ).to_json()
 
     def add_metadata(
-        self, metadata_path: str, metadata_type: str = "", table_id: str = ""
+        self, metadata_path: str, table_id: str = ""
     ) -> str:
+        """
+        Adds metadata into the database.
+
+        ## Args
+        - **metadata_path** (`str`): The path to a specific metadata file/folder
+        (`TXT` or `CSV`).
+        - **table_id** (`str`): A specific table id associated with the metadata.
+
+        ## Returns
+        - `str`: A JSON string representing the result of the process (`Response`).
+        """
         if os.path.isfile(metadata_path):
             return self.__read_metadata_file(
-                metadata_path, metadata_type, table_id
+                metadata_path, table_id
             ).to_json()
         if os.path.isdir(metadata_path):
             return self.__read_metadata_folder(
-                metadata_path, metadata_type, table_id
+                metadata_path, table_id
             ).to_json()
 
         return Response(
@@ -172,6 +220,18 @@ class Registrar:
         creator: str,
         accept_duplicates: bool = False,
     ) -> Response:
+        """
+        Reads a table file (CSV or Parquet), registers it in the database, and
+        updates if an existing table has the same ID.
+
+        ## Args
+        - **path** (`str`): The path to a specific table file (`CSV` or `parquet`).
+        - **creator** (`str`): The creator of the file.
+        - **accept_duplicates** (`bool`): Option to allow duplicate tables or not.
+
+        ## Returns
+        - `Response`: A `Response` object of the process.
+        """
         try:
             with duckdb.connect(self.db_path) as connection:
                 # Index -1 to get the file extension, then slice [1:] to remove the dot.
@@ -239,13 +299,17 @@ class Registrar:
                             message=f"This table already exists in the database with id {table_exist}.",
                         )
 
-                # Check if table with the same ID already exists.
-                # This means the same table with updated data is being registered.
-                if connection.sql(
-                    f"SELECT * FROM table_status WHERE id = '{path}'"
-                ).fetchone():
-                    # TODO Check if the table data has changed. Prompt the user to confirm if they want to update.
-                    pass
+                # Check if a table with the same ID already exists
+                existing_entry = connection.sql(
+                    f"SELECT table_name FROM table_status WHERE id = '{path}'"
+                ).fetchone()
+
+                if existing_entry:
+                    old_table_name = existing_entry[0]
+                    connection.sql(f"DROP TABLE IF EXISTS \"{old_table_name}\"")
+                    connection.sql(
+                        f"DELETE FROM table_status WHERE id = '{path}'"
+                    )
 
                 # The double quote is necessary to consider the path, which may contain
                 # full stop that may mess with schema as a single string. Having single quote
@@ -275,6 +339,17 @@ class Registrar:
     def __read_table_folder(
         self, folder_path: str, creator: str, accept_duplicates: bool = False
     ) -> Response:
+        """
+        Reads a folder and registers all of its tables to the database.
+
+        ## Args
+        - **folder_path** (`str`): The path to a folder containing tables.
+        - **creator** (`str`): The creator of the file.
+        - **accept_duplicates** (`bool`): Option to allow duplicate tables or not.
+
+        ## Returns
+        - `Response`: A `Response` object of the process.
+        """
         logger.info(f"Reading folder {folder_path}")
         paths = [os.path.join(folder_path, f) for f in os.listdir(folder_path)]
         data = []
@@ -301,9 +376,107 @@ class Registrar:
             data={"file_count": file_count, "tables": data},
         )
 
-    def __insert_metadata(
-        self, metadata_type: str, metadata_content: str, table_id: str
+    def __read_metadata_file(
+        self, metadata_path: str, table_id: str
     ) -> Response:
+        """
+        Reads a metadata file (CSV or TXT) and registers it in the database.
+
+        ## Args
+        - **metadata_path** (`str`): The path to a specific metadata file (`CSV`
+        or `TXT`).
+        - **table_id** (`str`): The associated table of the metadata.
+
+        ## Returns
+        - `Response`: A `Response` object of the process.
+        """
+        # Index -1 to get the file extension, then slice [1:] to remove the dot.
+        file_type = os.path.splitext(metadata_path)[-1][1:]
+
+        if file_type not in ["txt", "csv"]:
+            return Response(
+                status=ResponseStatus.ERROR,
+                message="Invalid file type. Please use 'txt' or 'csv'.",
+            )
+
+        if file_type == "txt":
+            with open(metadata_path, "r") as f:
+                metadata_content = f.read()
+
+            return self.__insert_metadata(metadata_content, table_id)
+
+        if file_type == "csv":
+            metadata_df = pd.read_csv(metadata_path)
+            data = []
+            for index, row in metadata_df.iterrows():
+                table_id = row["table_id"]
+                metadata_content = row["value"]
+                response = self.__insert_metadata(
+                    metadata_content, table_id
+                )
+                logger.info(response.message)
+                data.extend(response.data["metadata_ids"])
+
+            return Response(
+                status=ResponseStatus.SUCCESS,
+                message=f"{len(metadata_df)} metadata entries has been added.",
+                data={"file_count": len(data), "metadata_ids": data},
+            )
+
+        return None
+
+    def __read_metadata_folder(
+        self, metadata_path: str, table_id: str
+    ) -> Response:
+        """
+        Reads a folder and registers all of its metadata to the database.
+
+        ## Args
+        - **metadata_path** (`str`): The path to a folder containing metadata files.
+        - **table_id** (`str`): The associated table of the metadata files.
+
+        ## Returns
+        - `Response`: A `Response` object of the process.
+        """
+        logger.info(f"Reading metadata folder {metadata_path}")
+        paths = [os.path.join(metadata_path, f) for f in os.listdir(metadata_path)]
+        metadata_ids = []
+        for path in paths:
+            logger.info(f"=> Processing {path}")
+
+            # If the path is a folder, recursively read the folder.
+            if os.path.isdir(path):
+                response = self.__read_metadata_folder(path, table_id)
+                logger.info(response.message)
+                metadata_ids.extend(response.data["metadata_ids"])
+                continue
+
+            response = self.__read_metadata_file(path, table_id)
+            logger.info(
+                f"==> Processing metadata {path} {response.status.value}: {response.message}"
+            )
+            metadata_ids.extend(response.data["metadata_ids"])
+
+        file_count = len(metadata_ids)
+        return Response(
+            status=ResponseStatus.SUCCESS,
+            message=f"{file_count} files in folder {metadata_path} has been processed.",
+            data={"file_count": file_count, "metadata_ids": metadata_ids},
+        )
+
+    def __insert_metadata(
+        self, metadata_content: str, table_id: str
+    ) -> Response:
+        """
+        Inserts metadata associated with table `table_id` into the database.
+
+        ## Args
+        - **metadata_content** (`str`): The content of the metadata.
+        - **table_id** (`str`): The associated table of the metadata.
+
+        ## Returns
+        - `Response`: A `Response` object of the process.
+        """
         try:
             with duckdb.connect(self.db_path) as connection:
                 payload = {
@@ -318,7 +491,7 @@ class Registrar:
 
                 return Response(
                     status=ResponseStatus.SUCCESS,
-                    message=f"{metadata_type.capitalize()} ID: {metadata_id}",
+                    message=f"Metadata created with ID: {metadata_id}",
                     data={"file_count": 1, "metadata_ids": [metadata_id]},
                 )
         except Exception as e:
@@ -326,74 +499,6 @@ class Registrar:
                 status=ResponseStatus.ERROR,
                 message=f"Error connecting to database: {e}",
             )
-
-    def __read_metadata_file(
-        self, metadata_path: str, metadata_type: str, table_id: str
-    ) -> Response:
-        # Index -1 to get the file extension, then slice [1:] to remove the dot.
-        file_type = os.path.splitext(metadata_path)[-1][1:]
-
-        if file_type not in ["txt", "csv"]:
-            return Response(
-                status=ResponseStatus.ERROR,
-                message="Invalid file type. Please use 'txt' or 'csv'.",
-            )
-
-        if file_type == "txt":
-            with open(metadata_path, "r") as f:
-                metadata_content = f.read()
-
-            return self.__insert_metadata(metadata_type, metadata_content, table_id)
-
-        if file_type == "csv":
-            metadata_df = pd.read_csv(metadata_path)
-            data = []
-            for index, row in metadata_df.iterrows():
-                table_id = row["table_id"]
-                metadata_type = row["metadata_type"]
-                metadata_content = row["value"]
-                response = self.__insert_metadata(
-                    metadata_type, metadata_content, table_id
-                )
-                logger.info(response.message)
-                data.extend(response.data["metadata_ids"])
-
-            return Response(
-                status=ResponseStatus.SUCCESS,
-                message=f"{len(metadata_df)} metadata entries has been added.",
-                data={"file_count": len(data), "metadata_ids": data},
-            )
-
-        return None
-
-    def __read_metadata_folder(
-        self, metadata_path: str, metadata_type: str, table_id: str
-    ) -> Response:
-        logger.info(f"Reading metadata folder {metadata_path}")
-        paths = [os.path.join(metadata_path, f) for f in os.listdir(metadata_path)]
-        metadata_ids = []
-        for path in paths:
-            logger.info(f"=> Processing {path}")
-
-            # If the path is a folder, recursively read the folder.
-            if os.path.isdir(path):
-                response = self.__read_metadata_folder(path, metadata_type, table_id)
-                logger.info(response.message)
-                metadata_ids.extend(response.data["metadata_ids"])
-                continue
-
-            response = self.__read_metadata_file(path, metadata_type, table_id)
-            logger.info(
-                f"==> Processing metadata {path} {response.status.value}: {response.message}"
-            )
-            metadata_ids.extend(response.data["metadata_ids"])
-
-        file_count = len(metadata_ids)
-        return Response(
-            status=ResponseStatus.SUCCESS,
-            message=f"{file_count} files in folder {metadata_path} has been processed.",
-            data={"file_count": file_count, "metadata_ids": metadata_ids},
-        )
 
 
 if __name__ == "__main__":

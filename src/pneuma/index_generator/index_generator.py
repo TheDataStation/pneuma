@@ -148,7 +148,8 @@ class IndexGenerator:
                 return Response(
                     status=ResponseStatus.SUCCESS,
                     message=f"A hybrid index named {index_name} with id {vector_index_id}"
-                    f" and {fulltext_index_id} has been created with {len(table_ids)} tables.",
+                    f" (vector index) and {fulltext_index_id} (full-text index)"
+                    f" has been created with {len(table_ids)} tables.",
                     data={
                         "table_ids": table_ids,
                         "vector_index_id": vector_index_id,
