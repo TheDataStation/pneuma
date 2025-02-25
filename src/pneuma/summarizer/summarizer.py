@@ -1,3 +1,9 @@
+"""
+summarizer.py
+
+This module provides summarization functionality for indexed tables.
+"""
+
 import gc
 import json
 import logging
@@ -36,6 +42,23 @@ class Summarizer:
         db_path: str,
         max_llm_batch_size: int = 50,
     ):
+        """
+        Summarizes indexed tables in the database.
+
+        This class provides a method to summarize indexed tables in the database
+        to represent them for retrieval purposes.
+
+        ## Attributes
+        - **pipe** (`OpenAI | TextGenerationPipeline`): The LLM pipeline for inference.
+        - **embedding_model** (`OpenAI | SentenceTransformer`): The model used for
+        text embeddings.
+        - **db_path** (`str`): Path to the database file for retrieving content
+        summaries & context.
+        - **MAX_LLM_BATCH_SIZE** (`int`): The upper bound of batch size value to
+        explore dynamically for LLM inference.
+        - **EMBEDDING_MAX_TOKENS** (`int`): The maximum number of tokens the embedding
+        model supports (hard-coded to 512 for local models and 8191 for OpenAI models).
+        """
         self.db_path = db_path
         self.pipe = llm
         self.embedding_model = embed_model
@@ -83,6 +106,12 @@ class Summarizer:
                 else:
                     all_summary_ids = self.__batch_summarize_tables(table_ids)
 
+                if len(all_summary_ids) == 0:
+                    return Response(
+                        status=ResponseStatus.ERROR,
+                        message=f"Summarization failed",
+                    ).to_json()
+
                 return Response(
                     status=ResponseStatus.SUCCESS,
                     message=f"Total of {len(all_summary_ids)} summaries has been added "
@@ -96,6 +125,16 @@ class Summarizer:
             ).to_json()
 
     def __summarize_table_by_id(self, table_id: str) -> list[str]:
+        """
+        Summarizes the contents of a single table: `table_id`.
+
+        ## Args
+        - **table_id** (`str`): The specific table ID to be summarized.
+
+        ## Returns
+        - `list[str]`: The database IDs of the resulting summaries for table
+        `table_id`.
+        """
         try:
             with duckdb.connect(self.db_path) as connection:
                 status = connection.sql(
@@ -111,8 +150,8 @@ class Summarizer:
 
                 table_df = connection.sql(f"SELECT * FROM '{table_id}'").to_df()
 
-                narration_summaries = self.__generate_column_description(table_df)
-                row_summaries = self.__generate_row_summaries(table_df)
+                narration_summaries = self.__generate_column_narrations(table_df)
+                row_samples = self.__generate_row_samples(table_df)
 
                 summary_ids = []
 
@@ -127,8 +166,8 @@ class Summarizer:
                         ).fetchone()[0]
                     )
 
-                for row_summary in row_summaries:
-                    row_payload = json.dumps({"payload": row_summary})
+                for row_sample in row_samples:
+                    row_payload = json.dumps({"payload": row_sample})
                     row_payload = row_payload.replace("'", "''")
                     summary_ids.append(
                         connection.sql(
@@ -146,12 +185,19 @@ class Summarizer:
 
                 return summary_ids
         except Exception as e:
-            return Response(
-                status=ResponseStatus.ERROR,
-                message=f"Error connecting to database: {e}",
-            ).to_json()
+            logger.error(f"Error connecting to database: {e}")
+            return []
 
     def __batch_summarize_tables(self, table_ids: list[str]) -> list[str]:
+        """
+        Summarizes the contents of tables `table_ids`.
+
+        ## Args
+        - **table_ids** (`list[str]`): The specific table IDs to be summarized.
+
+        ## Returns
+        - `list[str]`: The database IDs of the resulting summaries for the tables.
+        """
         try:
             with duckdb.connect(self.db_path) as connection:
                 for table_id in table_ids:
@@ -166,14 +212,14 @@ class Summarizer:
                         )
                         table_ids.remove(table_id)
 
-                all_narration_summaries = self.__batch_generate_column_description(
+                all_narration_summaries = self.__batch_generate_column_narrations(
                     table_ids
                 )
                 summary_ids = []
 
                 for table_id, narration_summaries in all_narration_summaries.items():
                     table_df = connection.sql(f"SELECT * FROM '{table_id}'").to_df()
-                    row_summaries = self.__generate_row_summaries(table_df)
+                    row_samples = self.__generate_row_samples(table_df)
 
                     for narration_summary in narration_summaries:
                         narration_payload = json.dumps({"payload": narration_summary})
@@ -186,8 +232,8 @@ class Summarizer:
                             ).fetchone()[0]
                         )
 
-                    for row_summary in row_summaries:
-                        row_payload = json.dumps({"payload": row_summary})
+                    for row_sample in row_samples:
+                        row_payload = json.dumps({"payload": row_sample})
                         row_payload = row_payload.replace("'", "''")
                         summary_ids.append(
                             connection.sql(
@@ -205,19 +251,16 @@ class Summarizer:
 
                 return summary_ids
         except Exception as e:
-            return Response(
-                status=ResponseStatus.ERROR,
-                message=f"Error connecting to database: {e}",
-            ).to_json()
+            logger.error(f"Error connecting to database: {e}")
+            return []
 
-    def __generate_column_description(self, df: pd.DataFrame) -> list[str]:
-        # Used for quick local testing
-        # return " description | ".join(df.columns).strip() + " description"
-
+    def __generate_column_narrations(self, df: pd.DataFrame) -> list[str]:
+        """Generate column narrations for a single dataframe (for quick local
+        testing). This method may be removed in the future."""
         cols = df.columns
         conversations = []
         for col in cols:
-            prompt = self.__get_col_description_prompt(" | ".join(cols), col)
+            prompt = self.__get_col_narration_prompt(" | ".join(cols), col)
             conversations.append([{"role": "user", "content": prompt}])
 
         if len(conversations) > 0:
@@ -245,12 +288,21 @@ class Summarizer:
                     f"{cols[output_idx]}: {output[-1]['content']}".strip()
                 )
 
-        merged_column_descriptions = self.__merge_column_descriptions(col_narrations)
+        merged_column_descriptions = self.__block_column_narrations(col_narrations)
         return merged_column_descriptions
 
-    def __batch_generate_column_description(
+    def __batch_generate_column_narrations(
         self, table_ids: list[str]
     ) -> dict[str, list[str]]:
+        """
+        Generates column narrations for the tables `table_ids`.
+
+        ## Args
+        - **table_ids** (`list[str]`): The specific table IDs to be narrated.
+
+        ## Returns
+        - `dict[str, list[str]]`: The column narrations of the tables.
+        """
         try:
             with duckdb.connect(self.db_path) as connection:
                 summaries: dict[str, list[str]] = {}
@@ -262,9 +314,7 @@ class Summarizer:
                     table_df = connection.sql(f"SELECT * FROM '{table_id}'").to_df()
                     cols = table_df.columns
                     for col in cols:
-                        prompt = self.__get_col_description_prompt(
-                            " | ".join(cols), col
-                        )
+                        prompt = self.__get_col_narration_prompt(" | ".join(cols), col)
                         conversations.append([{"role": "user", "content": prompt}])
                         conv_tables.append(table_id)
                         conv_cols.append(col)
@@ -323,23 +373,44 @@ class Summarizer:
                         ]
 
                 for key, value in col_narrations.items():
-                    summaries[key] = self.__merge_column_descriptions(value)
+                    summaries[key] = self.__block_column_narrations(value)
 
                 return summaries
         except Exception as e:
-            return Response(
-                status=ResponseStatus.ERROR,
-                message=f"Error connecting to database: {e}",
-            ).to_json()
+            logger.error(f"Error connecting to database: {e}")
+            return {}
 
-    def __get_col_description_prompt(self, columns: str, column: str):
+    def __get_col_narration_prompt(self, columns: str, column: str) -> str:
+        """
+        Returns the prompt to narrate a column of a table given other columns
+        in the table.
+
+        ## Args
+        - **columns** (`str`): A concatenation of `columns`.
+        - **column** (`str`): A specific column (part of `columns`) to be narrated.
+
+        ## Returns
+        - `str`: The prompt to narrate `column`.
+        """
         return f"""A table has the following columns:
 /*
 {columns}
 */
 Describe briefly what the {column} column represents. If not possible, simply state "No description.\""""
 
-    def __get_optimal_batch_size(self, conversations: list[dict[str, str]]):
+    def __get_optimal_batch_size(self, conversations: list[dict[str, str]]) -> int:
+        """
+        Explores the optimal batch size value (bounded between 1 and
+        `MAX_LLM_BATCH_SIZE`) for `conversations` to be set for the LLM pipeline
+        using binary search.
+
+        ## Args
+        - **conversations** (`list[dict[str, str]]`): The list of prompts to
+        narrate columns of tables.
+
+        ## Returns
+        - `int`: The optimal batch size.
+        """
         max_batch_size = self.MAX_LLM_BATCH_SIZE
         min_batch_size = 1
         logger.info(
@@ -357,7 +428,21 @@ Describe briefly what the {column} column represents. If not possible, simply st
         logger.info(f"Optimal batch size: {optimal_batch_size}")
         return optimal_batch_size
 
-    def __is_fit_in_memory(self, conversations: list[dict[str, str]], batch_size: int):
+    def __is_fit_in_memory(
+        self, conversations: list[dict[str, str]], batch_size: int
+    ) -> bool:
+        """
+        Checks if `conversations` with the given `batch_size` fits in memory when
+        running inference using the LLM pipeline.
+
+        ## Args
+        - **conversations** (`list[dict[str, str]]`): The list of prompts to
+        narrate columns of tables.
+        - **batch_size** (`int`): The specific batch size value to test.
+
+        ## Returns
+        - `bool`: The `conversations` fit or not in memory.
+        """
         special_indices = self.__get_special_indices(conversations, batch_size)
         adjusted_conversations = [conversations[i] for i in special_indices]
 
@@ -384,14 +469,27 @@ Describe briefly what the {column} column represents. If not possible, simply st
             del output
             return True
 
-    def __get_special_indices(self, texts: list[str], batch_size: int):
+    def __get_special_indices(self, prompts: list[str], batch_size: int) -> list[int]:
+        """
+        Sorts `prompts` in a specific manner to try to balance the memory load
+        for each batch of LLM inferences.
+
+        ## Args
+        - **prompts** (`list[str]`): The list of prompts to narrate columns of
+        tables.
+        - **batch_size** (`int`): The optimal batch size value to be used.
+
+        ## Returns
+        - `list[int]`: The "special indices" for the `prompts` given the `batch
+        size`.
+        """
         # Step 1: Sort the conversations (indices) in decreasing order
         sorted_indices = sorted(
-            range(len(texts)), key=lambda x: len(texts[x]), reverse=True
+            range(len(prompts)), key=lambda x: len(prompts[x]), reverse=True
         )
 
         # Step 2: Interleave the indices (longest, shortest, second longest, second shortest, ...)
-        final_indices = []
+        final_indices: list[int] = []
         i, j = 0, len(sorted_indices) - 1
 
         while i <= j:
@@ -410,7 +508,19 @@ Describe briefly what the {column} column represents. If not possible, simply st
                     break
         return final_indices
 
-    def __merge_column_descriptions(self, column_narrations: list[str]) -> list[str]:
+    def __block_column_narrations(self, column_narrations: list[str]) -> list[str]:
+        """
+        Convert column narrations into blocks to try to group multiple narrations
+        as much as possible, reducing the amount of embeddings that need to be
+        produced.
+
+        ## Args
+        - **column_narrations** (`list[str]`): The list of column narrations for
+        a set of tables.
+
+        ## Returns
+        - `list[str]`: The blocked version of `column_narrations`.
+        """
         if isinstance(self.embedding_model, OpenAI):
             tokenizer = tiktoken.encoding_for_model("gpt-4o")
         else:
@@ -438,30 +548,52 @@ Describe briefly what the {column} column represents. If not possible, simply st
 
         return merged_column_descriptions
 
-    def __generate_row_summaries(self, df: pd.DataFrame) -> list[str]:
+    def __generate_row_samples(self, df: pd.DataFrame) -> list[str]:
+        """
+        Generates row samples for the table `df`. The process is deterministic
+        because we set the sampling seed to be the value 0.
+
+        ## Args
+        - **df** (`pd.DataFrame`): The specific table to sample rows from.
+
+        ## Returns
+        - `list[str]`: The sampled rows
+        """
         sample_size = math.ceil(min(len(df), 5))
         selected_df = df.sample(n=sample_size, random_state=0).reset_index(drop=True)
 
-        row_summaries = []
+        row_samples = []
         for row_idx, row in selected_df.iterrows():
             formatted_row = " | ".join([f"{col}: {val}" for col, val in row.items()])
-            row_summaries.append(formatted_row.strip())
+            row_samples.append(formatted_row.strip())
 
-        merged_row_summaries = self.__merge_row_summaries(row_summaries)
-        return merged_row_summaries
+        merged_row_samples = self.__block_row_samples(row_samples)
+        return merged_row_samples
 
-    def __merge_row_summaries(self, row_summaries: list[str]) -> list[str]:
+    def __block_row_samples(self, row_samples: list[str]) -> list[str]:
+        """
+        Convert row samples into blocks to try to group multiple samples
+        as much as possible, reducing the amount of embeddings that need to be
+        produced.
+
+        ## Args
+        - **row_samples** (`list[str]`): The list of row samples for a set of
+        tables.
+
+        ## Returns
+        - `list[str]`: The blocked version of `row_samples`.
+        """
         if isinstance(self.embedding_model, OpenAI):
             tokenizer = tiktoken.encoding_for_model("gpt-4o")
         else:
             tokenizer = self.embedding_model.tokenizer
-        merged_row_summaries = []
+        merged_row_samples = []
 
         row_idx = 0
-        while row_idx < len(row_summaries):
-            current_summary = row_summaries[row_idx]
-            while row_idx + 1 < len(row_summaries):
-                combined_summary = current_summary + " || " + row_summaries[row_idx + 1]
+        while row_idx < len(row_samples):
+            current_summary = row_samples[row_idx]
+            while row_idx + 1 < len(row_samples):
+                combined_summary = current_summary + " || " + row_samples[row_idx + 1]
                 if len(tokenizer.encode(combined_summary)) < self.EMBEDDING_MAX_TOKENS:
                     current_summary = combined_summary
                     row_idx += 1
@@ -469,9 +601,9 @@ Describe briefly what the {column} column represents. If not possible, simply st
                     break
 
             row_idx += 1
-            merged_row_summaries.append(current_summary)
+            merged_row_samples.append(current_summary)
 
-        return merged_row_summaries
+        return merged_row_samples
 
 
 if __name__ == "__main__":
