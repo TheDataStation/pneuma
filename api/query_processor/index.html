@@ -1,0 +1,1502 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://pneuma.github.io/api/query_processor/">
+      
+      
+        <link rel="prev" href="../index_generator/">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.5">
+    
+    
+      
+        <title>QueryProcessor - Pneuma</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Open Sans";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#pneuma.query_processor.QueryProcessor" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Pneuma" class="md-header__button md-logo" aria-label="Pneuma" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Pneuma
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              QueryProcessor
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/TheDataStation/pneuma" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    TheDataStation/pneuma
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../.." class="md-tabs__link">
+          
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../reference/" class="md-tabs__link">
+          
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Pneuma" class="md-nav__button md-logo" aria-label="Pneuma" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Pneuma
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/TheDataStation/pneuma" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    TheDataStation/pneuma
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start Tutorial
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../registrar/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Registrar
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../summarizer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Summarizer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index_generator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    IndexGenerator
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    QueryProcessor
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    QueryProcessor
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;QueryProcessor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" QueryProcessor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor--attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Attributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__init__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.query" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;query
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" query">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.query--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.query--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__get_retrievers" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__get_retrievers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __get_retrievers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__get_retrievers--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__get_retrievers--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__hybrid_retriever" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__hybrid_retriever
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __hybrid_retriever">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__hybrid_retriever--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__hybrid_retriever--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__process_nodes_bm25" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__process_nodes_bm25
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __process_nodes_bm25">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__process_nodes_bm25--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__process_nodes_bm25--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__process_nodes_vec" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__process_nodes_vec
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __process_nodes_vec">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__process_nodes_vec--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__process_nodes_vec--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__rerank" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__rerank
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __rerank">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__rerank--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__rerank--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__get_relevance_prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__get_relevance_prompt
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __get_relevance_prompt">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__get_relevance_prompt--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__get_relevance_prompt--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;QueryProcessor
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" QueryProcessor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor--attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Attributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__init__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.query" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;query
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" query">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.query--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.query--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__get_retrievers" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__get_retrievers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __get_retrievers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__get_retrievers--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__get_retrievers--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__hybrid_retriever" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__hybrid_retriever
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __hybrid_retriever">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__hybrid_retriever--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__hybrid_retriever--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__process_nodes_bm25" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__process_nodes_bm25
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __process_nodes_bm25">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__process_nodes_bm25--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__process_nodes_bm25--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__process_nodes_vec" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__process_nodes_vec
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __process_nodes_vec">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__process_nodes_vec--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__process_nodes_vec--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__rerank" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__rerank
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __rerank">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__rerank--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__rerank--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__get_relevance_prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__get_relevance_prompt
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __get_relevance_prompt">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__get_relevance_prompt--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.query_processor.QueryProcessor.__get_relevance_prompt--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+  <h1>QueryProcessor</h1>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="pneuma.query_processor.QueryProcessor" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">QueryProcessor</span>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+
+        <p>Processes queries against generated hybrid indexes.</p>
+<p>This class provides a method to retrieve tables from hybrid indexes,
+helping people find the relevant tables for their tasks.</p>
+<h5 id="pneuma.query_processor.QueryProcessor--attributes">Attributes</h5>
+<ul>
+<li><strong>pipe</strong> (<code>OpenAI | TextGenerationPipeline</code>): The LLM pipeline for inference.</li>
+<li><strong>embedding_model</strong> (<code>OpenAI | SentenceTransformer</code>): The model used for
+text embeddings.</li>
+<li><strong>stemmer</strong> (<code>Stemmer</code>): A stemming tool used for text normalization.</li>
+<li><strong>index_path</strong> (<code>str</code>): Path to the directory where indexes are stored.</li>
+<li><strong>vector_index_path</strong> (<code>str</code>): Path for vector-based indexing.</li>
+<li><strong>fulltext_index_path</strong> (<code>str</code>): Path for full-text search indexing.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pneuma.query_processor.QueryProcessor.__init__" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">__init__</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="fm">__init__</span><span class="p">(</span><span class="nf">llm</span><span class="p">:</span> <span class="n">OpenAI</span> <span class="o">|</span> <span class="n">TextGenerationPipeline</span><span class="p">,</span> <span class="n">embed_model</span><span class="p">:</span> <span class="n">OpenAI</span> <span class="o">|</span> <span class="n">SentenceTransformer</span><span class="p">,</span> <span class="n">index_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pneuma.query_processor.QueryProcessor.query" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">query</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">query</span><span class="p">(</span><span class="n">index_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">queries</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Retrieves tables for the given <code>queries</code> against the index <code>index_name</code>.</p>
+<h6 id="pneuma.query_processor.QueryProcessor.query--args">Args</h6>
+<ul>
+<li><strong>index_name</strong> (<code>str</code>): The name of the index to be retrieved against.</li>
+<li><strong>queries</strong> (<code>str | list[str]</code>): The query of list of queries to be executed.</li>
+<li><strong>k</strong> (<code>int</code>): The number of documents associated with the tables to be
+retrieved.</li>
+<li><strong>n</strong> (<code>int</code>): The multiplicative factor of <code>k</code> to pool more relevant
+documents for the hybrid retrieval process.</li>
+<li><strong>alpha</strong> (<code>float</code>): The weighting factor of the vector and full-text
+retrievers within a hybrid index. Lower <code>alpha</code> gives more weight to
+the vector retriever.</li>
+</ul>
+<h6 id="pneuma.query_processor.QueryProcessor.query--returns">Returns</h6>
+<ul>
+<li><code>str</code>: A JSON string representing the result of the process (<code>Response</code>).</li>
+</ul>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pneuma.query_processor.QueryProcessor.__get_retrievers" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">__get_retrievers</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__get_retrievers</span><span class="p">(</span><span class="n">index_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Collection</span><span class="p">,</span> <span class="n">bm25s</span><span class="o">.</span><span class="n">BM25</span><span class="p">]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Get both vector and full-text retrievers of the index <code>index_name</code>.</p>
+<h6 id="pneuma.query_processor.QueryProcessor.__get_retrievers--args">Args</h6>
+<ul>
+<li><strong>index_name</strong> (<code>str</code>): The name of the hybrid index.</li>
+</ul>
+<h6 id="pneuma.query_processor.QueryProcessor.__get_retrievers--returns">Returns</h6>
+<ul>
+<li><code>tuple[Collection, bm25s.BM25]</code>: The vector and full-text retrievers.</li>
+</ul>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pneuma.query_processor.QueryProcessor.__hybrid_retriever" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">__hybrid_retriever</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__hybrid_retriever</span><span class="p">(</span><span class="n">bm25_retriever</span><span class="p">:</span> <span class="n">BM25</span><span class="p">,</span> <span class="n">vec_retriever</span><span class="p">:</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">bm25_res</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">],</span> <span class="n">vec_res</span><span class="p">:</span> <span class="n">QueryResult</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">query_tokens</span><span class="p">:</span> <span class="n">Tokenized</span><span class="p">,</span> <span class="n">query_embedding</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Generates a hybrid index with name <code>index_name</code> for a given <code>table_ids</code>.</p>
+<h6 id="pneuma.query_processor.QueryProcessor.__hybrid_retriever--args">Args</h6>
+<ul>
+<li><strong>bm25_retriever</strong> (<code>BM25</code>): The full-text retriever within the hybrid
+index.</li>
+<li><strong>vec_retriever</strong> (<code>Collection</code>): The vector retriever within the hybrid
+index.</li>
+<li><strong>bm25_res</strong> (<code>tuple[ndarray, ndarray]</code>): Retrieval results from the
+full-text retriever.</li>
+<li><strong>vec_res</strong> (<code>QueryResult</code>): Retrieval results from the vector retriever.</li>
+<li><strong>k</strong> (<code>int</code>): The number of documents retrieved from both retrievers.</li>
+<li><strong>query</strong> (<code>str</code>): The query.</li>
+<li><strong>alpha</strong> (<code>float</code>): The weighting factor of the vector and full-text
+retrievers within a hybrid index. Lower <code>alpha</code> gives more weight to
+the vector retriever.</li>
+<li><strong>query_tokens</strong> (<code>Tokenized</code>): The tokenized query.</li>
+<li><strong>query_embeddings</strong> (<code>list[float]</code>): The embedding of the query</li>
+</ul>
+<h6 id="pneuma.query_processor.QueryProcessor.__hybrid_retriever--returns">Returns</h6>
+<ul>
+<li><code>list[tuple[str, float, str]]</code>: The result of the hybrid search.</li>
+</ul>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pneuma.query_processor.QueryProcessor.__process_nodes_bm25" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">__process_nodes_bm25</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__process_nodes_bm25</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">],</span> <span class="n">missing_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">dictionary_id_bm25</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">bm25_retriever</span><span class="p">:</span> <span class="n">BM25</span><span class="p">,</span> <span class="n">query_tokens</span><span class="p">:</span> <span class="n">Tokenized</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Processes the retrieval results of the full-text retriever for the purpose
+of hybrid search (augment the results with missing IDs of documents
+retrieved from the vector index).</p>
+<h6 id="pneuma.query_processor.QueryProcessor.__process_nodes_bm25--args">Args</h6>
+<ul>
+<li><strong>items</strong> (<code>tuple[ndarray, ndarray]</code>): Retrieval results from the
+full-text retriever.</li>
+<li><strong>missing_ids</strong> (<code>list[str]</code>): The IDs available in the retrieval results
+of the vector retriever but not full-text retriever.</li>
+<li><strong>dictionary_id_bm25</strong> (<code>dict[str, int]</code>): The table-document
+associations within the full-text retriever.</li>
+<li><strong>bm25_retriever</strong> (<code>BM25</code>): The full-text retriever.</li>
+<li><strong>query_tokens</strong> (<code>Tokenized</code>): The tokenized query.</li>
+</ul>
+<h6 id="pneuma.query_processor.QueryProcessor.__process_nodes_bm25--returns">Returns</h6>
+<ul>
+<li><code>dict[str, tuple[float, str]]</code>: The processed results representing the
+score and document of each document ID.</li>
+</ul>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pneuma.query_processor.QueryProcessor.__process_nodes_vec" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">__process_nodes_vec</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__process_nodes_vec</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="n">QueryResult</span><span class="p">,</span> <span class="n">missing_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">collection</span><span class="p">:</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">query_embedding</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Processes the retrieval results of the vector retriever for the purpose
+of hybrid search (augment the results with missing IDs of documents
+retrieved from the full-text index).</p>
+<h6 id="pneuma.query_processor.QueryProcessor.__process_nodes_vec--args">Args</h6>
+<ul>
+<li><strong>items</strong> (<code>QueryResult</code>): Retrieval results from the vector retriever.</li>
+<li><strong>missing_ids</strong> (<code>list[str]</code>): The IDs available in the retrieval results
+of the full-text retriever but not vector retriever.</li>
+<li><strong>collection</strong> (<code>dict[str, int]</code>): The vector retriever</li>
+<li><strong>query_embedding</strong> (<code>list[float]</code>): The embedding of the query.</li>
+</ul>
+<h6 id="pneuma.query_processor.QueryProcessor.__process_nodes_vec--returns">Returns</h6>
+<ul>
+<li><code>dict[str, tuple[float, str]]</code>: The processed results representing the
+score and document of each document ID.</li>
+</ul>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pneuma.query_processor.QueryProcessor.__rerank" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">__rerank</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__rerank</span><span class="p">(</span><span class="n">nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Perform re-ranking of documents against the query. Basically, the <code>LLM
+Judge</code> classifies whether a document is relevant or not against the query.</p>
+<h6 id="pneuma.query_processor.QueryProcessor.__rerank--args">Args</h6>
+<ul>
+<li><strong>nodes</strong> (<code>list[tuple[str, float, str]]</code>): The list of tuples, each of
+which consists of ID, relevance score, and document, resulted from the
+hybrid search mechanism.</li>
+<li><strong>query</strong> (<code>str</code>): The query.</li>
+</ul>
+<h6 id="pneuma.query_processor.QueryProcessor.__rerank--returns">Returns</h6>
+<ul>
+<li><code>dict[str, tuple[float, str]]</code>: The re-ranked results.</li>
+</ul>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pneuma.query_processor.QueryProcessor.__get_relevance_prompt" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">__get_relevance_prompt</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__get_relevance_prompt</span><span class="p">(</span><span class="n">desc</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">desc_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Returns relevance prompts for re-ranking purposes. The prompt format is
+slightly different between content summaries and context (metadata).</p>
+<h6 id="pneuma.query_processor.QueryProcessor.__get_relevance_prompt--args">Args</h6>
+<ul>
+<li><strong>desc</strong> (<code>str</code>): The description of a table, which is either a content
+summary or context (metadata).</li>
+<li><strong>desc_type</strong> (<code>str</code>): The description type: content or context.</li>
+<li><strong>query</strong> (<code>str</code>): The query to be compared against.</li>
+</ul>
+<h6 id="pneuma.query_processor.QueryProcessor.__get_relevance_prompt--returns">Returns</h6>
+<ul>
+<li><code>str</code>: A relevance prompt.</li>
+</ul>
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../index_generator/" class="md-footer__link md-footer__link--prev" aria-label="Previous: IndexGenerator">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                IndexGenerator
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2025 Pneuma Team
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["header.autohide", "navigation.tabs", "navigation.instant", "navigation.footer"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      
+    
+  </body>
+</html>

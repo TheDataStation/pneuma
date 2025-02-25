@@ -1,0 +1,1907 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://pneuma.github.io/api/summarizer/">
+      
+      
+        <link rel="prev" href="../registrar/">
+      
+      
+        <link rel="next" href="../index_generator/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.5">
+    
+    
+      
+        <title>Summarizer - Pneuma</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Open Sans";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#pneuma.summarizer.Summarizer" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Pneuma" class="md-header__button md-logo" aria-label="Pneuma" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Pneuma
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Summarizer
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/TheDataStation/pneuma" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    TheDataStation/pneuma
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../.." class="md-tabs__link">
+          
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../reference/" class="md-tabs__link">
+          
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Pneuma" class="md-nav__button md-logo" aria-label="Pneuma" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Pneuma
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/TheDataStation/pneuma" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    TheDataStation/pneuma
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start Tutorial
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../registrar/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Registrar
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Summarizer
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Summarizer
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;Summarizer
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" Summarizer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer--attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Attributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__init__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.summarize" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;summarize
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" summarize">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.summarize--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.summarize--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__summarize_table_by_id" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__summarize_table_by_id
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __summarize_table_by_id">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__summarize_table_by_id--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__summarize_table_by_id--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__batch_summarize_tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__batch_summarize_tables
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __batch_summarize_tables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__batch_summarize_tables--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__batch_summarize_tables--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__generate_column_narrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__generate_column_narrations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__batch_generate_column_narrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__batch_generate_column_narrations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __batch_generate_column_narrations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__batch_generate_column_narrations--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__batch_generate_column_narrations--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__get_col_narration_prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__get_col_narration_prompt
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __get_col_narration_prompt">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__get_col_narration_prompt--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__get_col_narration_prompt--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__get_optimal_batch_size" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__get_optimal_batch_size
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __get_optimal_batch_size">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__get_optimal_batch_size--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__get_optimal_batch_size--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__is_fit_in_memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__is_fit_in_memory
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __is_fit_in_memory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__is_fit_in_memory--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__is_fit_in_memory--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__get_special_indices" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__get_special_indices
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __get_special_indices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__get_special_indices--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__get_special_indices--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__block_column_narrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__block_column_narrations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __block_column_narrations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__block_column_narrations--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__block_column_narrations--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__generate_row_samples" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__generate_row_samples
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __generate_row_samples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__generate_row_samples--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__generate_row_samples--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__block_row_samples" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__block_row_samples
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __block_row_samples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__block_row_samples--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__block_row_samples--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index_generator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    IndexGenerator
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../query_processor/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    QueryProcessor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;Summarizer
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" Summarizer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer--attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Attributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__init__
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.summarize" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;summarize
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" summarize">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.summarize--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.summarize--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__summarize_table_by_id" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__summarize_table_by_id
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __summarize_table_by_id">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__summarize_table_by_id--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__summarize_table_by_id--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__batch_summarize_tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__batch_summarize_tables
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __batch_summarize_tables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__batch_summarize_tables--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__batch_summarize_tables--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__generate_column_narrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__generate_column_narrations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__batch_generate_column_narrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__batch_generate_column_narrations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __batch_generate_column_narrations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__batch_generate_column_narrations--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__batch_generate_column_narrations--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__get_col_narration_prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__get_col_narration_prompt
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __get_col_narration_prompt">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__get_col_narration_prompt--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__get_col_narration_prompt--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__get_optimal_batch_size" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__get_optimal_batch_size
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __get_optimal_batch_size">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__get_optimal_batch_size--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__get_optimal_batch_size--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__is_fit_in_memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__is_fit_in_memory
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __is_fit_in_memory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__is_fit_in_memory--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__is_fit_in_memory--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__get_special_indices" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__get_special_indices
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __get_special_indices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__get_special_indices--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__get_special_indices--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__block_column_narrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__block_column_narrations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __block_column_narrations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__block_column_narrations--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__block_column_narrations--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__generate_row_samples" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__generate_row_samples
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __generate_row_samples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__generate_row_samples--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__generate_row_samples--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__block_row_samples" class="md-nav__link">
+    <span class="md-ellipsis">
+      <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;__block_row_samples
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" __block_row_samples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__block_row_samples--args" class="md-nav__link">
+    <span class="md-ellipsis">
+      Args
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pneuma.summarizer.Summarizer.__block_row_samples--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Returns
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+  <h1>Summarizer</h1>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="pneuma.summarizer.Summarizer" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">Summarizer</span>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+
+        <p>Summarizes indexed tables in the database.</p>
+<p>This class provides a method to summarize indexed tables in the database
+to represent them for retrieval purposes.</p>
+<h5 id="pneuma.summarizer.Summarizer--attributes">Attributes</h5>
+<ul>
+<li><strong>pipe</strong> (<code>OpenAI | TextGenerationPipeline</code>): The LLM pipeline for inference.</li>
+<li><strong>embedding_model</strong> (<code>OpenAI | SentenceTransformer</code>): The model used for
+text embeddings.</li>
+<li><strong>db_path</strong> (<code>str</code>): Path to the database file for retrieving content
+summaries &amp; context.</li>
+<li><strong>MAX_LLM_BATCH_SIZE</strong> (<code>int</code>): The upper bound of batch size value to
+explore dynamically for LLM inference.</li>
+<li><strong>EMBEDDING_MAX_TOKENS</strong> (<code>int</code>): The maximum number of tokens the embedding
+model supports (hard-coded to 512 for local models and 8191 for OpenAI models).</li>
+</ul>
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pneuma.summarizer.Summarizer.__init__" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">__init__</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="fm">__init__</span><span class="p">(</span><span class="nf">llm</span><span class="p">:</span> <span class="n">OpenAI</span> <span class="o">|</span> <span class="n">TextGenerationPipeline</span><span class="p">,</span> <span class="n">embed_model</span><span class="p">:</span> <span class="n">OpenAI</span> <span class="o">|</span> <span class="n">SentenceTransformer</span><span class="p">,</span> <span class="n">db_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">max_llm_batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pneuma.summarizer.Summarizer.summarize" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">summarize</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">summarize</span><span class="p">(</span><span class="n">table_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Summarizes the contents of all unsummarized tables or a specific table
+if <code>table_id</code> is provided.</p>
+<h6 id="pneuma.summarizer.Summarizer.summarize--args">Args</h6>
+<ul>
+<li><strong>table_id</strong> (<code>str</code>): The specific table ID to be summarized.</li>
+</ul>
+<h6 id="pneuma.summarizer.Summarizer.summarize--returns">Returns</h6>
+<ul>
+<li><code>str</code>: A JSON string representing the result of the process (<code>Response</code>).</li>
+</ul>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pneuma.summarizer.Summarizer.__summarize_table_by_id" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">__summarize_table_by_id</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__summarize_table_by_id</span><span class="p">(</span><span class="n">table_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Summarizes the contents of a single table: <code>table_id</code>.</p>
+<h6 id="pneuma.summarizer.Summarizer.__summarize_table_by_id--args">Args</h6>
+<ul>
+<li><strong>table_id</strong> (<code>str</code>): The specific table ID to be summarized.</li>
+</ul>
+<h6 id="pneuma.summarizer.Summarizer.__summarize_table_by_id--returns">Returns</h6>
+<ul>
+<li><code>list[str]</code>: The database IDs of the resulting summaries for table
+<code>table_id</code>.</li>
+</ul>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pneuma.summarizer.Summarizer.__batch_summarize_tables" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">__batch_summarize_tables</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__batch_summarize_tables</span><span class="p">(</span><span class="n">table_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Summarizes the contents of tables <code>table_ids</code>.</p>
+<h6 id="pneuma.summarizer.Summarizer.__batch_summarize_tables--args">Args</h6>
+<ul>
+<li><strong>table_ids</strong> (<code>list[str]</code>): The specific table IDs to be summarized.</li>
+</ul>
+<h6 id="pneuma.summarizer.Summarizer.__batch_summarize_tables--returns">Returns</h6>
+<ul>
+<li><code>list[str]</code>: The database IDs of the resulting summaries for the tables.</li>
+</ul>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pneuma.summarizer.Summarizer.__generate_column_narrations" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">__generate_column_narrations</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__generate_column_narrations</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Generate column narrations for a single dataframe (for quick local
+testing). This method may be removed in the future.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pneuma.summarizer.Summarizer.__batch_generate_column_narrations" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">__batch_generate_column_narrations</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__batch_generate_column_narrations</span><span class="p">(</span><span class="n">table_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Generates column narrations for the tables <code>table_ids</code>.</p>
+<h6 id="pneuma.summarizer.Summarizer.__batch_generate_column_narrations--args">Args</h6>
+<ul>
+<li><strong>table_ids</strong> (<code>list[str]</code>): The specific table IDs to be narrated.</li>
+</ul>
+<h6 id="pneuma.summarizer.Summarizer.__batch_generate_column_narrations--returns">Returns</h6>
+<ul>
+<li><code>dict[str, list[str]]</code>: The column narrations of the tables.</li>
+</ul>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pneuma.summarizer.Summarizer.__get_col_narration_prompt" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">__get_col_narration_prompt</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__get_col_narration_prompt</span><span class="p">(</span><span class="n">columns</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">column</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Returns the prompt to narrate a column of a table given other columns
+in the table.</p>
+<h6 id="pneuma.summarizer.Summarizer.__get_col_narration_prompt--args">Args</h6>
+<ul>
+<li><strong>columns</strong> (<code>str</code>): A concatenation of <code>columns</code>.</li>
+<li><strong>column</strong> (<code>str</code>): A specific column (part of <code>columns</code>) to be narrated.</li>
+</ul>
+<h6 id="pneuma.summarizer.Summarizer.__get_col_narration_prompt--returns">Returns</h6>
+<ul>
+<li><code>str</code>: The prompt to narrate <code>column</code>.</li>
+</ul>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pneuma.summarizer.Summarizer.__get_optimal_batch_size" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">__get_optimal_batch_size</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__get_optimal_batch_size</span><span class="p">(</span><span class="n">conversations</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">int</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Explores the optimal batch size value (bounded between 1 and
+<code>MAX_LLM_BATCH_SIZE</code>) for <code>conversations</code> to be set for the LLM pipeline
+using binary search.</p>
+<h6 id="pneuma.summarizer.Summarizer.__get_optimal_batch_size--args">Args</h6>
+<ul>
+<li><strong>conversations</strong> (<code>list[dict[str, str]]</code>): The list of prompts to
+narrate columns of tables.</li>
+</ul>
+<h6 id="pneuma.summarizer.Summarizer.__get_optimal_batch_size--returns">Returns</h6>
+<ul>
+<li><code>int</code>: The optimal batch size.</li>
+</ul>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pneuma.summarizer.Summarizer.__is_fit_in_memory" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">__is_fit_in_memory</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__is_fit_in_memory</span><span class="p">(</span><span class="n">conversations</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Checks if <code>conversations</code> with the given <code>batch_size</code> fits in memory when
+running inference using the LLM pipeline.</p>
+<h6 id="pneuma.summarizer.Summarizer.__is_fit_in_memory--args">Args</h6>
+<ul>
+<li><strong>conversations</strong> (<code>list[dict[str, str]]</code>): The list of prompts to
+narrate columns of tables.</li>
+<li><strong>batch_size</strong> (<code>int</code>): The specific batch size value to test.</li>
+</ul>
+<h6 id="pneuma.summarizer.Summarizer.__is_fit_in_memory--returns">Returns</h6>
+<ul>
+<li><code>bool</code>: The <code>conversations</code> fit or not in memory.</li>
+</ul>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pneuma.summarizer.Summarizer.__get_special_indices" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">__get_special_indices</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__get_special_indices</span><span class="p">(</span><span class="n">prompts</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Sorts <code>prompts</code> in a specific manner to try to balance the memory load
+for each batch of LLM inferences.</p>
+<h6 id="pneuma.summarizer.Summarizer.__get_special_indices--args">Args</h6>
+<ul>
+<li><strong>prompts</strong> (<code>list[str]</code>): The list of prompts to narrate columns of
+tables.</li>
+<li><strong>batch_size</strong> (<code>int</code>): The optimal batch size value to be used.</li>
+</ul>
+<h6 id="pneuma.summarizer.Summarizer.__get_special_indices--returns">Returns</h6>
+<ul>
+<li><code>list[int]</code>: The "special indices" for the <code>prompts</code> given the <code>batch
+size</code>.</li>
+</ul>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pneuma.summarizer.Summarizer.__block_column_narrations" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">__block_column_narrations</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__block_column_narrations</span><span class="p">(</span><span class="n">column_narrations</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Convert column narrations into blocks to try to group multiple narrations
+as much as possible, reducing the amount of embeddings that need to be
+produced.</p>
+<h6 id="pneuma.summarizer.Summarizer.__block_column_narrations--args">Args</h6>
+<ul>
+<li><strong>column_narrations</strong> (<code>list[str]</code>): The list of column narrations for
+a set of tables.</li>
+</ul>
+<h6 id="pneuma.summarizer.Summarizer.__block_column_narrations--returns">Returns</h6>
+<ul>
+<li><code>list[str]</code>: The blocked version of <code>column_narrations</code>.</li>
+</ul>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pneuma.summarizer.Summarizer.__generate_row_samples" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">__generate_row_samples</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__generate_row_samples</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Generates row samples for the table <code>df</code>. The process is deterministic
+because we set the sampling seed to be the value 0.</p>
+<h6 id="pneuma.summarizer.Summarizer.__generate_row_samples--args">Args</h6>
+<ul>
+<li><strong>df</strong> (<code>pd.DataFrame</code>): The specific table to sample rows from.</li>
+</ul>
+<h6 id="pneuma.summarizer.Summarizer.__generate_row_samples--returns">Returns</h6>
+<ul>
+<li><code>list[str]</code>: The sampled rows</li>
+</ul>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="pneuma.summarizer.Summarizer.__block_row_samples" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">__block_row_samples</span>
+
+
+</h4>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__block_row_samples</span><span class="p">(</span><span class="n">row_samples</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Convert row samples into blocks to try to group multiple samples
+as much as possible, reducing the amount of embeddings that need to be
+produced.</p>
+<h6 id="pneuma.summarizer.Summarizer.__block_row_samples--args">Args</h6>
+<ul>
+<li><strong>row_samples</strong> (<code>list[str]</code>): The list of row samples for a set of
+tables.</li>
+</ul>
+<h6 id="pneuma.summarizer.Summarizer.__block_row_samples--returns">Returns</h6>
+<ul>
+<li><code>list[str]</code>: The blocked version of <code>row_samples</code>.</li>
+</ul>
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../registrar/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Registrar">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Registrar
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../index_generator/" class="md-footer__link md-footer__link--next" aria-label="Next: IndexGenerator">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                IndexGenerator
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2025 Pneuma Team
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["header.autohide", "navigation.tabs", "navigation.instant", "navigation.footer"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      
+    
+  </body>
+</html>
