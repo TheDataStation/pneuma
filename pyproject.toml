@@ -1,6 +1,6 @@
 [project]
 name = "pneuma"
-version = "0.0.2"
+version = "0.0.3"
 description = 'Pneuma is an LLM-powered data discovery system for tabular data.'
 readme = "README.md"
 requires-python = ">=3.10"
