@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://pneuma.github.io/</loc>
-         <lastmod>2025-02-25</lastmod>
+         <loc>https://thedatastation.github.io/pneuma/</loc>
+         <lastmod>2025-02-26</lastmod>
     </url>
     <url>
-         <loc>https://pneuma.github.io/api/index_generator/</loc>
-         <lastmod>2025-02-25</lastmod>
+         <loc>https://thedatastation.github.io/pneuma/api/index_generator/</loc>
+         <lastmod>2025-02-26</lastmod>
     </url>
     <url>
-         <loc>https://pneuma.github.io/api/query_processor/</loc>
-         <lastmod>2025-02-25</lastmod>
+         <loc>https://thedatastation.github.io/pneuma/api/query_processor/</loc>
+         <lastmod>2025-02-26</lastmod>
     </url>
     <url>
-         <loc>https://pneuma.github.io/api/reference/</loc>
-         <lastmod>2025-02-25</lastmod>
+         <loc>https://thedatastation.github.io/pneuma/api/reference/</loc>
+         <lastmod>2025-02-26</lastmod>
     </url>
     <url>
-         <loc>https://pneuma.github.io/api/registrar/</loc>
-         <lastmod>2025-02-25</lastmod>
+         <loc>https://thedatastation.github.io/pneuma/api/registrar/</loc>
+         <lastmod>2025-02-26</lastmod>
     </url>
     <url>
-         <loc>https://pneuma.github.io/api/summarizer/</loc>
-         <lastmod>2025-02-25</lastmod>
+         <loc>https://thedatastation.github.io/pneuma/api/summarizer/</loc>
+         <lastmod>2025-02-26</lastmod>
     </url>
     <url>
-         <loc>https://pneuma.github.io/getting-started/installation/</loc>
-         <lastmod>2025-02-25</lastmod>
+         <loc>https://thedatastation.github.io/pneuma/getting-started/installation/</loc>
+         <lastmod>2025-02-26</lastmod>
     </url>
     <url>
-         <loc>https://pneuma.github.io/getting-started/quickstart/</loc>
-         <lastmod>2025-02-25</lastmod>
+         <loc>https://thedatastation.github.io/pneuma/getting-started/quickstart/</loc>
+         <lastmod>2025-02-26</lastmod>
     </url>
 </urlset>

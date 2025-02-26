@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://pneuma.github.io/api/query_processor/">
+        <link rel="canonical" href="https://thedatastation.github.io/pneuma/api/query_processor/">
       
       
         <link rel="prev" href="../index_generator/">
@@ -1167,7 +1167,11 @@ text embeddings.</li>
 
 
 </h4>
-<div class="doc-signature highlight"><pre><span></span><code><span class="fm">__init__</span><span class="p">(</span><span class="nf">llm</span><span class="p">:</span> <span class="n">OpenAI</span> <span class="o">|</span> <span class="n">TextGenerationPipeline</span><span class="p">,</span> <span class="n">embed_model</span><span class="p">:</span> <span class="n">OpenAI</span> <span class="o">|</span> <span class="n">SentenceTransformer</span><span class="p">,</span> <span class="n">index_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="fm">__init__</span><span class="p">(</span>
+    <span class="nf">llm</span><span class="p">:</span> <span class="n">OpenAI</span> <span class="o">|</span> <span class="n">TextGenerationPipeline</span><span class="p">,</span>
+    <span class="n">embed_model</span><span class="p">:</span> <span class="n">OpenAI</span> <span class="o">|</span> <span class="n">SentenceTransformer</span><span class="p">,</span>
+    <span class="n">index_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1184,7 +1188,13 @@ text embeddings.</li>
 
 
 </h4>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">query</span><span class="p">(</span><span class="n">index_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">queries</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">query</span><span class="p">(</span>
+    <span class="n">index_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">queries</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1246,7 +1256,17 @@ the vector retriever.</li>
 
 
 </h4>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__hybrid_retriever</span><span class="p">(</span><span class="n">bm25_retriever</span><span class="p">:</span> <span class="n">BM25</span><span class="p">,</span> <span class="n">vec_retriever</span><span class="p">:</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">bm25_res</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">],</span> <span class="n">vec_res</span><span class="p">:</span> <span class="n">QueryResult</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">query_tokens</span><span class="p">:</span> <span class="n">Tokenized</span><span class="p">,</span> <span class="n">query_embedding</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__hybrid_retriever</span><span class="p">(</span>
+    <span class="n">bm25_retriever</span><span class="p">:</span> <span class="n">BM25</span><span class="p">,</span>
+    <span class="n">vec_retriever</span><span class="p">:</span> <span class="n">Collection</span><span class="p">,</span>
+    <span class="n">bm25_res</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">],</span>
+    <span class="n">vec_res</span><span class="p">:</span> <span class="n">QueryResult</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">query_tokens</span><span class="p">:</span> <span class="n">Tokenized</span><span class="p">,</span>
+    <span class="n">query_embedding</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1286,7 +1306,13 @@ the vector retriever.</li>
 
 
 </h4>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__process_nodes_bm25</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">],</span> <span class="n">missing_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">dictionary_id_bm25</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">bm25_retriever</span><span class="p">:</span> <span class="n">BM25</span><span class="p">,</span> <span class="n">query_tokens</span><span class="p">:</span> <span class="n">Tokenized</span><span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__process_nodes_bm25</span><span class="p">(</span>
+    <span class="n">items</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">],</span>
+    <span class="n">missing_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">dictionary_id_bm25</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+    <span class="n">bm25_retriever</span><span class="p">:</span> <span class="n">BM25</span><span class="p">,</span>
+    <span class="n">query_tokens</span><span class="p">:</span> <span class="n">Tokenized</span><span class="p">,</span>
+<span class="p">)</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1323,7 +1349,12 @@ score and document of each document ID.</li>
 
 
 </h4>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__process_nodes_vec</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="n">QueryResult</span><span class="p">,</span> <span class="n">missing_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">collection</span><span class="p">:</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">query_embedding</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__process_nodes_vec</span><span class="p">(</span>
+    <span class="n">items</span><span class="p">:</span> <span class="n">QueryResult</span><span class="p">,</span>
+    <span class="n">missing_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">collection</span><span class="p">:</span> <span class="n">Collection</span><span class="p">,</span>
+    <span class="n">query_embedding</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+<span class="p">)</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1357,7 +1388,9 @@ score and document of each document ID.</li>
 
 
 </h4>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__rerank</span><span class="p">(</span><span class="n">nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__rerank</span><span class="p">(</span>
+    <span class="n">nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">

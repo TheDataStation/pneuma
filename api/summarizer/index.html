@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://pneuma.github.io/api/summarizer/">
+        <link rel="canonical" href="https://thedatastation.github.io/pneuma/api/summarizer/">
       
       
         <link rel="prev" href="../registrar/">
@@ -1453,7 +1453,12 @@ model supports (hard-coded to 512 for local models and 8191 for OpenAI models).<
 
 
 </h4>
-<div class="doc-signature highlight"><pre><span></span><code><span class="fm">__init__</span><span class="p">(</span><span class="nf">llm</span><span class="p">:</span> <span class="n">OpenAI</span> <span class="o">|</span> <span class="n">TextGenerationPipeline</span><span class="p">,</span> <span class="n">embed_model</span><span class="p">:</span> <span class="n">OpenAI</span> <span class="o">|</span> <span class="n">SentenceTransformer</span><span class="p">,</span> <span class="n">db_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">max_llm_batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="fm">__init__</span><span class="p">(</span>
+    <span class="nf">llm</span><span class="p">:</span> <span class="n">OpenAI</span> <span class="o">|</span> <span class="n">TextGenerationPipeline</span><span class="p">,</span>
+    <span class="n">embed_model</span><span class="p">:</span> <span class="n">OpenAI</span> <span class="o">|</span> <span class="n">SentenceTransformer</span><span class="p">,</span>
+    <span class="n">db_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">max_llm_batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+<span class="p">)</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1573,7 +1578,9 @@ testing). This method may be removed in the future.</p>
 
 
 </h4>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__batch_generate_column_narrations</span><span class="p">(</span><span class="n">table_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__batch_generate_column_narrations</span><span class="p">(</span>
+    <span class="n">table_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1659,7 +1666,9 @@ narrate columns of tables.</li>
 
 
 </h4>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__is_fit_in_memory</span><span class="p">(</span><span class="n">conversations</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__is_fit_in_memory</span><span class="p">(</span>
+    <span class="n">conversations</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">

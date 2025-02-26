@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://pneuma.github.io/api/index_generator/">
+        <link rel="canonical" href="https://thedatastation.github.io/pneuma/api/index_generator/">
       
       
         <link rel="prev" href="../summarizer/">
@@ -1191,7 +1191,9 @@ model supports (hard-coded to 512 for local models and 8191 for OpenAI models).<
 
 
 </h4>
-<div class="doc-signature highlight"><pre><span></span><code><span class="fm">__init__</span><span class="p">(</span><span class="nf">embed_model</span><span class="p">:</span> <span class="n">OpenAI</span> <span class="o">|</span> <span class="n">SentenceTransformer</span><span class="p">,</span> <span class="n">db_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">index_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="fm">__init__</span><span class="p">(</span>
+    <span class="nf">embed_model</span><span class="p">:</span> <span class="n">OpenAI</span> <span class="o">|</span> <span class="n">SentenceTransformer</span><span class="p">,</span> <span class="n">db_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">index_path</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1208,7 +1210,9 @@ model supports (hard-coded to 512 for local models and 8191 for OpenAI models).<
 
 
 </h4>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">generate_index</span><span class="p">(</span><span class="n">index_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">generate_index</span><span class="p">(</span>
+    <span class="n">index_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1265,7 +1269,11 @@ model supports (hard-coded to 512 for local models and 8191 for OpenAI models).<
 
 
 </h4>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__insert_documents_to_vector_index</span><span class="p">(</span><span class="n">index_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">table_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">chroma_collection</span><span class="p">:</span> <span class="n">Collection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__insert_documents_to_vector_index</span><span class="p">(</span>
+    <span class="n">index_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">table_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">chroma_collection</span><span class="p">:</span> <span class="n">Collection</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1323,7 +1331,9 @@ a vector index.</p>
 
 
 </h4>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__insert_documents_to_fulltext_index</span><span class="p">(</span><span class="n">index_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">table_ids</span><span class="p">:</span> <span class="nb">list</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">retriever</span><span class="p">:</span> <span class="n">BM25</span><span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__insert_documents_to_fulltext_index</span><span class="p">(</span>
+    <span class="n">index_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">table_ids</span><span class="p">:</span> <span class="nb">list</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">retriever</span><span class="p">:</span> <span class="n">BM25</span>
+<span class="p">)</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1399,7 +1409,9 @@ database.</p>
 
 
 </h4>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__get_content_summaries</span><span class="p">(</span><span class="n">table_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">summary_type</span><span class="p">:</span> <span class="n">SummaryType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">__get_content_summaries</span><span class="p">(</span>
+    <span class="n">table_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">summary_type</span><span class="p">:</span> <span class="n">SummaryType</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
