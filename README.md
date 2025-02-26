@@ -1,6 +1,7 @@
 ![pneuma-banner](https://raw.githubusercontent.com/TheDataStation/pneuma/main/data_src/assets/pneuma-architecture.png)
 
 # Pneuma
+[![Docs](https://img.shields.io/badge/Read_the_Docs-maroon?logo=readthedocs)](https://thedatastation.github.io/pneuma)
 [![Colab Demo](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/TheDataStation/pneuma/blob/main/quickstart-colab.ipynb)
 [![PyPI](https://img.shields.io/pypi/v/pneuma)](https://pypi.org/project/pneuma/)
 
