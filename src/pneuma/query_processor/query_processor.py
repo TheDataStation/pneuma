@@ -145,6 +145,7 @@ class QueryProcessor:
             for table, score, content in all_nodes:
                 table = table.split("_SEP_")[0]
                 tables.append(table)
+            tables = list(dict.fromkeys(tables))
             queries_tables.append(
                 {
                     "query": query,
