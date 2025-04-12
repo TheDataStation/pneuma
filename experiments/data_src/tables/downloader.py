@@ -77,16 +77,16 @@ if __name__ == "__main__":
         try:
             dataset_id = dataset_mappings[dataset]['id']
             dataset_filename = dataset_mappings[dataset]['filename']
-            # if dataset_id.startswith('http'):
-            #     download_with_progress(
-            #         dataset_id,
-            #         filename=os.path.join(SCRIPT_DIR, dataset_filename),
-            #     )
-            # else:
-            #     download_with_progress(
-            #         f"https://uchicago.box.com/shared/static/{dataset_id}",
-            #         filename=os.path.join(SCRIPT_DIR, dataset_filename),
-            #     )
+            if dataset_id.startswith('http'):
+                download_with_progress(
+                    dataset_id,
+                    filename=os.path.join(SCRIPT_DIR, dataset_filename),
+                )
+            else:
+                download_with_progress(
+                    f"https://uchicago.box.com/shared/static/{dataset_id}",
+                    filename=os.path.join(SCRIPT_DIR, dataset_filename),
+                )
             extract_tar(os.path.join(SCRIPT_DIR, dataset_filename), SCRIPT_DIR)
             post_process_dataset(os.path.join(SCRIPT_DIR, dataset_filename[:-4]))
         except KeyError:
