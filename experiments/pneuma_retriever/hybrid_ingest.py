@@ -31,7 +31,6 @@ def indexing_full_text(
     row_content_type: str,
     contexts: list[dict[str, str]],
 ):
-    start = time.time()
     corpus_json = []
 
     if row_contents is not None:
@@ -92,8 +91,6 @@ def indexing_full_text(
     retriever.save(
         f"indices/fulltext-index-{dataset}{f'-{schema_content_type}' if schema_content_type != "none" else ''}{f'-{row_content_type}' if row_content_type != "none" else ''}{'-context' if include_contexts else ''}"
     )
-    end = time.time()
-    print(f"Indexing time of dataset {dataset}: {end-start} seconds")
 
 
 def indexing_vector(
