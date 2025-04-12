@@ -7,9 +7,10 @@ We strongly recommend to create a Conda environment and install the requirements
 
 ```bash
 conda create --name pneuma-experiment python=3.12.2
+conda activate pneuma-experiment
 conda install -c nvidia cuda-toolkit
 export CUDA_HOME=$CONDA_PREFIX
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
 ## Download models and datasets
@@ -28,6 +29,10 @@ python models/downloader.py -hf "[Your HF TOKEN]"
 ### Step 1: Represent the Datasets as Texts
 
 We represent each table in a dataset by describing its schema using LLMs and randomly sampling $r=5$ rows. We also refer to these documents as content summaries, as they summarize what each table represents. [pneuma_summarizer](pneuma_summarizer/README.md) explains to produce the documents or download previously generated ones.
+
+### Step 2: Index Documents
+
+We ingest all documents into a hybrid index, consisting of both vector and full-text indices. 
 
 We are going to update this README to include specific steps to replicate the experiments using the scripts soon. Below are some details of what each directory represents.
 

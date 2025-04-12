@@ -1,4 +1,4 @@
-transformers==4.48.3
+transformers==4.44.2
 pandas==2.2.2
 torch==2.4.0
 sentence-transformers==3.0.1
@@ -20,5 +20,5 @@ SQLAlchemy==2.0.32
 duckdb_engine==0.13.1
 
 # Special chromadb: deterministic version
-git+https://github.com/luthfibalaka/chroma.git@deterministic-index-building
 chroma-hnswlib==0.7.6
+git+https://github.com/luthfibalaka/chroma.git@3cbf2bdedaa7383f1385f4ff08c5bdd1b2ccbde1

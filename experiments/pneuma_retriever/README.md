@@ -1,5 +1,18 @@
 # Pneuma-Retriever
 
+To ingest all documents for all experiment scenarios, run the following commands:
+
+## RQ1: End-to-End Evaluation
+
+```bash
+nohup python hybrid_ingest.py -d chembl -sctn schema_narrations -rctn sample_rows -ctx true >> hybrid_ingest-chembl-schema_narrations-sample_rows-ctx.out &
+nohup python hybrid_ingest.py -d adventure -sctn schema_narrations -rctn sample_rows -ctx true >> hybrid_ingest-adventure-schema_narrations-sample_rows-ctx.out &
+nohup python hybrid_ingest.py -d public -sctn schema_narrations -rctn sample_rows -ctx true >> hybrid_ingest-public-schema_narrations-sample_rows-ctx.out &
+nohup python hybrid_ingest.py -d chicago -sctn schema_narrations -rctn sample_rows -ctx true >> hybrid_ingest-chicago-schema_narrations-sample_rows-ctx.out &
+nohup python hybrid_ingest.py -d fetaqa -sctn schema_narrations -rctn sample_rows -ctx true >> hybrid_ingest-fetaqa-schema_narrations-sample_rows-ctx.out &
+nohup python hybrid_ingest.py -d bird -sctn schema_narrations -rctn sample_rows -ctx false >> hybrid_ingest-fetaqa-schema_narrations-sample_rows-none.out &
+```
+
 To run the experiment, do the following steps:
 
 1. Download the necessary datasets, summaries, models, and benchmarks in the `pneuma_summarizer/summaries`, `data_src`, and `models`.

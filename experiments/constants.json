@@ -1,5 +1,5 @@
 {
-    "data_src": "../data_src",
+    "data_src": "data_src",
     "datasets": {
         "chembl": "pneuma_chembl_10K",
         "adventure": "pneuma_adventure_works",
