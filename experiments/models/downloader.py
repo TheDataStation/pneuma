@@ -121,7 +121,7 @@ def main(hf_token: str):
     ]
     repo_id = "Qwen/Qwen2.5-7B"
     for file in files:
-        hf_hub_download(repo_id=repo_id, filename=file, local_dir="./qwen-hallucinate")
+        hf_hub_download(repo_id=repo_id, filename=file, local_dir="./qwen-non-instruct")
 
     # Download HuggingFaceH4/zephyr-7b-beta
     files = [

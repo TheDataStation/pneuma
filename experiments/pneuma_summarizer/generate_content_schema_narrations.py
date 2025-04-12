@@ -140,7 +140,7 @@ def parse_tables(tables: list[str], tables_path: str):
 
 
 def generate_schema_narration_summaries(
-    tables_path: str, summaries_name: str, hallucinate: bool,
+    tables_path: str, summaries_name: str, hallucinate: bool, model_name: str
 ):
     tables = sorted([file[:-4] for file in os.listdir(tables_path)])
     summaries: list[dict[str, str]] = []
@@ -155,7 +155,10 @@ def generate_schema_narration_summaries(
 
     SCHEMA_NARRATIONS_PATH = "summaries/schema_narrations"
     if hallucinate:
-        SCHEMA_NARRATIONS_PATH = "summaries/hallucinate"
+        if model_name == "qwen":
+            SCHEMA_NARRATIONS_PATH = "summaries/temperature-1.5-instruct"
+        else:
+            SCHEMA_NARRATIONS_PATH = "summaries/temperature-1.5-none"
 
     if len(conversations) > 0:
         outputs = []
@@ -221,6 +224,7 @@ if __name__ == "__main__":
                 the `summaries` directory.",
     )
     parser.add_argument("-d", "--dataset", default="all")
+    parser.add_argument("-m", "--model", default="qwen")
     parser.add_argument(
         "-hal",
         "--hallucinate",
@@ -230,10 +234,7 @@ if __name__ == "__main__":
     )
     dataset: str = parser.parse_args().dataset
     hallucinate: bool = parser.parse_args().hallucinate
-
-    model_name = "qwen"
-    if hallucinate:
-        model_name += "-hallucinate"
+    model_name: str = parser.parse_args().model
 
     pipe = initialize_pipeline(f"../models/{model_name}", torch.bfloat16, context_length=32768)
 
@@ -251,12 +252,12 @@ if __name__ == "__main__":
         for table_info in TABLES.items():
             summaries_name, table_name = table_info
             tables_path = TABLES_SRC + table_name
-            generate_schema_narration_summaries(tables_path, summaries_name, hallucinate)
+            generate_schema_narration_summaries(tables_path, summaries_name, hallucinate, model_name)
     else:
         try:
             table_name = TABLES[dataset]
             tables_path = TABLES_SRC + table_name
-            generate_schema_narration_summaries(tables_path, dataset, hallucinate)
+            generate_schema_narration_summaries(tables_path, dataset, hallucinate, model_name)
         except KeyError:
             print(
                 f"Dataset {dataset} not found! Please define the path in `constants.json`."

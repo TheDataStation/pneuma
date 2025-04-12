@@ -25,6 +25,10 @@ python models/downloader.py -hf "[Your HF TOKEN]"
 
 ## Run the Experiments
 
+### Step 1: Represent the Datasets as Texts
+
+We represent each table in a dataset by describing its schema using LLMs and randomly sampling $r=5$ rows. We also refer to these documents as content summaries, as they summarize what each table represents. [pneuma_summarizer](pneuma_summarizer/README.md) explains to produce the documents or download previously generated ones.
+
 We are going to update this README to include specific steps to replicate the experiments using the scripts soon. Below are some details of what each directory represents.
 
 - `other_systems`: Scripts to test the hit rates of baselines, including LlamaIndex's RAG and full-text search. For Solo, please refer to [the repo](https://github.com/TheDataStation/solo) directly.
