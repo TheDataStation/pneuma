@@ -1,5 +1,10 @@
 # Experiments
-This directory contains scripts we use to experiment in the paper (SIGMOD 2025). Below is a high-level overview of what each sub-directory represents.
+This directory contains scripts we use to experiment in the paper (SIGMOD 2025). To run the experiments, do the following:
+
+## Download models and 
+
+
+Below is a high-level overview of what each sub-directory represents.
 
 - `models`: Scripts to download all models (LLMs, embedding models, and re-ranker models).
 - `other_systems`: Scripts to test the hit rates of baselines, including LlamaIndex's RAG and full-text search. For Solo, please refer to [the repo](https://github.com/TheDataStation/solo) directly.
