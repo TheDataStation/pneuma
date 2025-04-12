@@ -5,12 +5,64 @@ To ingest all documents for all experiment scenarios, run the following commands
 ## RQ1: End-to-End Evaluation
 
 ```bash
-nohup python hybrid_ingest.py -d chembl -sctn schema_narrations -rctn sample_rows -ctx true >> hybrid_ingest-chembl-schema_narrations-sample_rows-ctx.out &
-nohup python hybrid_ingest.py -d adventure -sctn schema_narrations -rctn sample_rows -ctx true >> hybrid_ingest-adventure-schema_narrations-sample_rows-ctx.out &
-nohup python hybrid_ingest.py -d public -sctn schema_narrations -rctn sample_rows -ctx true >> hybrid_ingest-public-schema_narrations-sample_rows-ctx.out &
-nohup python hybrid_ingest.py -d chicago -sctn schema_narrations -rctn sample_rows -ctx true >> hybrid_ingest-chicago-schema_narrations-sample_rows-ctx.out &
-nohup python hybrid_ingest.py -d fetaqa -sctn schema_narrations -rctn sample_rows -ctx true >> hybrid_ingest-fetaqa-schema_narrations-sample_rows-ctx.out &
-nohup python hybrid_ingest.py -d bird -sctn schema_narrations -rctn sample_rows -ctx false >> hybrid_ingest-fetaqa-schema_narrations-sample_rows-none.out &
+nohup python hybrid_ingest.py -d chembl -sctn schema_narrations -rctn sample_rows -ctx true >> output/hybrid_ingest-chembl-schema_narrations-sample_rows-ctx.out &
+nohup python hybrid_ingest.py -d adventure -sctn schema_narrations -rctn sample_rows -ctx true >> output/hybrid_ingest-adventure-schema_narrations-sample_rows-ctx.out &
+nohup python hybrid_ingest.py -d public -sctn schema_narrations -rctn sample_rows -ctx true >> output/hybrid_ingest-public-schema_narrations-sample_rows-ctx.out &
+nohup python hybrid_ingest.py -d chicago -sctn schema_narrations -rctn sample_rows -ctx true >> output/hybrid_ingest-chicago-schema_narrations-sample_rows-ctx.out &
+nohup python hybrid_ingest.py -d fetaqa -sctn schema_narrations -rctn sample_rows -ctx true >> output/hybrid_ingest-fetaqa-schema_narrations-sample_rows-ctx.out &
+nohup python hybrid_ingest.py -d bird -sctn schema_narrations -rctn sample_rows -ctx false >> output/hybrid_ingest-fetaqa-schema_narrations-sample_rows-none.out &
+```
+
+## RQ3: Ablation Study
+
+```bash
+# ChEMBL
+nohup python hybrid_ingest.py -d chembl -sctn schema_narrations -rctn none -ctx false >> output/hybrid_ingest-chembl-schema_narrations-none-false.out &
+nohup python hybrid_ingest.py -d chembl -sctn schema_concat -rctn none -ctx false >> output/hybrid_ingest-chembl-schema_concat-none-false.out &
+nohup python hybrid_ingest.py -d chembl -sctn none -rctn sample_rows -ctx false >> output/hybrid_ingest-chembl-none-sample_rows-false.out &
+nohup python hybrid_ingest.py -d chembl -sctn none -rctn dbreader -ctx false >> output/hybrid_ingest-chembl-none-dbreader-false.out &
+
+# Adventure Works
+nohup python hybrid_ingest.py -d adventure -sctn schema_narrations -rctn none -ctx false >> output/hybrid_ingest-adventure-schema_narrations-none-false.out &
+nohup python hybrid_ingest.py -d adventure -sctn schema_concat -rctn none -ctx false >> output/hybrid_ingest-adventure-schema_concat-none-false.out &
+nohup python hybrid_ingest.py -d adventure -sctn none -rctn sample_rows -ctx false >> output/hybrid_ingest-adventure-none-sample_rows-false.out &
+nohup python hybrid_ingest.py -d adventure -sctn none -rctn dbreader -ctx false >> output/hybrid_ingest-adventure-none-dbreader-false.out &
+
+# Public BI
+nohup python hybrid_ingest.py -d public -sctn schema_narrations -rctn none -ctx false >> output/hybrid_ingest-public-schema_narrations-none-false.out &
+nohup python hybrid_ingest.py -d public -sctn schema_concat -rctn none -ctx false >> output/hybrid_ingest-public-schema_concat-none-false.out &
+nohup python hybrid_ingest.py -d public -sctn none -rctn sample_rows -ctx false >> output/hybrid_ingest-public-none-sample_rows-false.out &
+nohup python hybrid_ingest.py -d public -sctn none -rctn dbreader -ctx false >> output/hybrid_ingest-public-none-dbreader-false.out &
+
+# Chicago Open
+nohup python hybrid_ingest.py -d chicago -sctn schema_narrations -rctn none -ctx false >> output/hybrid_ingest-chicago-schema_narrations-none-false.out &
+nohup python hybrid_ingest.py -d chicago -sctn schema_concat -rctn none -ctx false >> output/hybrid_ingest-chicago-schema_concat-none-false.out &
+nohup python hybrid_ingest.py -d chicago -sctn none -rctn sample_rows -ctx false >> output/hybrid_ingest-chicago-none-sample_rows-false.out &
+nohup python hybrid_ingest.py -d chicago -sctn none -rctn dbreader -ctx false >> output/hybrid_ingest-chicago-none-dbreader-false.out &
+
+# FeTaQA
+nohup python hybrid_ingest.py -d fetaqa -sctn schema_narrations -rctn none -ctx false >> output/hybrid_ingest-fetaqa-schema_narrations-none-false.out &
+nohup python hybrid_ingest.py -d fetaqa -sctn schema_concat -rctn none -ctx false >> output/hybrid_ingest-fetaqa-schema_concat-none-false.out &
+nohup python hybrid_ingest.py -d fetaqa -sctn none -rctn sample_rows -ctx false >> output/hybrid_ingest-chicago-none-sample_rows-false.out &
+nohup python hybrid_ingest.py -d fetaqa -sctn none -rctn dbreader -ctx false >> output/hybrid_ingest-fetaqa-none-dbreader-false.out &
+```
+
+## RQ-4
+
+```bash
+# Temp-1.5 (Qwen Non-Instruct)
+nohup python hybrid_ingest.py -d chembl -sctn temperature-1.5-none -rctn none -ctx false >> output/hybrid_ingest-chembl-temperature-1.5-none-none-false.out &
+nohup python hybrid_ingest.py -d adventure -sctn temperature-1.5-none -rctn none -ctx false >> output/hybrid_ingest-adventure-temperature-1.5-none-none-false.out &
+nohup python hybrid_ingest.py -d public -sctn temperature-1.5-none -rctn none -ctx false >> output/hybrid_ingest-public-temperature-1.5-none-none-false.out &
+nohup python hybrid_ingest.py -d chicago -sctn temperature-1.5-none -rctn none -ctx false >> output/hybrid_ingest-chicago-temperature-1.5-none-none-false.out &
+nohup python hybrid_ingest.py -d fetaqa -sctn temperature-1.5-none -rctn none -ctx false >> output/hybrid_ingest-fetaqa-temperature-1.5-none-none-false.out &
+
+# Temp-1.5 (Qwen Instruct)
+nohup python hybrid_ingest.py -d chembl -sctn temperature-1.5-instruct -rctn none -ctx false >> output/hybrid_ingest-chembl-temperature-1.5-instruct-none-false.out &
+nohup python hybrid_ingest.py -d adventure -sctn temperature-1.5-instruct -rctn none -ctx false >> output/hybrid_ingest-adventure-temperature-1.5-instruct-none-false.out &
+nohup python hybrid_ingest.py -d public -sctn temperature-1.5-instruct -rctn none -ctx false >> output/hybrid_ingest-public-temperature-1.5-instruct-none-false.out &
+nohup python hybrid_ingest.py -d chicago -sctn temperature-1.5-instruct -rctn none -ctx false >> output/hybrid_ingest-chicago-temperature-1.5-instruct-none-false.out &
+nohup python hybrid_ingest.py -d fetaqa -sctn temperature-1.5-instruct -rctn none -ctx false >> output/hybrid_ingest-fetaqa-temperature-1.5-instruct-none-false.out &
 ```
 
 To run the experiment, do the following steps:
