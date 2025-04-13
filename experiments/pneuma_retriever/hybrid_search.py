@@ -14,7 +14,7 @@ from transformers import set_seed
 from chromadb.api.models.Collection import Collection
 from benchmark_generator.context.utils.jsonl import read_jsonl, write_jsonl
 from benchmark_generator.context.utils.pipeline_initializer import initialize_pipeline
-from hybrid_retriever import HybridRetriever, RerankingMode
+from hybrid_mechanism import HybridRetriever, RerankingMode
 
 
 os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"

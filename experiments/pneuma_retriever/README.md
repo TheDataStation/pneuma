@@ -1,8 +1,6 @@
 # Pneuma-Retriever
 
-To ingest all documents for all experiment scenarios, run the following commands:
-
-## RQ1: End-to-End Evaluation
+Ingest documents for all experiment scenarios using the following commands:
 
 ```bash
 nohup python hybrid_ingest.py -d chembl -sctn schema_narrations -rctn sample_rows -ctx true >> output/hybrid_ingest-chembl-schema_narrations-sample_rows-ctx.out &
@@ -12,8 +10,6 @@ nohup python hybrid_ingest.py -d chicago -sctn schema_narrations -rctn sample_ro
 nohup python hybrid_ingest.py -d fetaqa -sctn schema_narrations -rctn sample_rows -ctx true >> output/hybrid_ingest-fetaqa-schema_narrations-sample_rows-ctx.out &
 nohup python hybrid_ingest.py -d bird -sctn schema_narrations -rctn sample_rows -ctx false >> output/hybrid_ingest-fetaqa-schema_narrations-sample_rows-none.out &
 ```
-
-## RQ3: Ablation Study
 
 ```bash
 # ChEMBL
@@ -63,6 +59,12 @@ nohup python hybrid_ingest.py -d adventure -sctn temperature-1.5-instruct -rctn 
 nohup python hybrid_ingest.py -d public -sctn temperature-1.5-instruct -rctn none -ctx false >> output/hybrid_ingest-public-temperature-1.5-instruct-none-false.out &
 nohup python hybrid_ingest.py -d chicago -sctn temperature-1.5-instruct -rctn none -ctx false >> output/hybrid_ingest-chicago-temperature-1.5-instruct-none-false.out &
 nohup python hybrid_ingest.py -d fetaqa -sctn temperature-1.5-instruct -rctn none -ctx false >> output/hybrid_ingest-fetaqa-temperature-1.5-instruct-none-false.out &
+```
+
+Now to get the hit rates:
+
+```bash
+
 ```
 
 To run the experiment, do the following steps:
