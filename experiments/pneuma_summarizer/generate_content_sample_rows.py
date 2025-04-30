@@ -15,7 +15,10 @@ def generate_sample_rows_summaries(table_path: str, summary_path: str):
     content_summaries = []
     tables = sorted(os.listdir(table_path))
     for table_idx, table in enumerate(tqdm(tables)):
-        df = pd.read_csv(f"{table_path}/{table}", on_bad_lines="skip")
+        try:
+            df = pd.read_csv(f"{table_path}/{table}", on_bad_lines="skip")
+        except pd.errors.EmptyDataError:
+            continue
         sample_size = math.ceil(min(len(df), 5))
 
         selected_df = df.sample(n=sample_size, random_state=table_idx).reset_index(
