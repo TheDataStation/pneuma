@@ -1,0 +1,24 @@
+transformers==4.44.2
+pandas==2.2.2
+torch==2.4.0
+sentence-transformers==3.0.1
+flash_attn==2.6.3
+bm25s==0.1.10
+accelerate==0.33.0
+PyStemmer==2.2.0.1
+FlagEmbedding==1.2.11
+peft==0.12.0
+jax==0.4.33
+duckdb==1.1.0
+sentencepiece==0.2.0
+protobuf==5.28.0
+llama-index==0.11.3
+llama-index-readers-database==0.2.0
+llama-index-llms-huggingface==0.3.1
+llama-index-embeddings-huggingface==0.3.1
+SQLAlchemy==2.0.32
+duckdb_engine==0.13.1
+
+# Special chromadb: deterministic version
+chroma-hnswlib==0.7.6
+git+https://github.com/luthfibalaka/chroma.git@3cbf2bdedaa7383f1385f4ff08c5bdd1b2ccbde1

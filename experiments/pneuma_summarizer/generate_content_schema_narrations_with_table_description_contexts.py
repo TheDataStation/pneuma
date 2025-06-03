@@ -1,3 +1,4 @@
+# NOT PART OF EXPERIMENTS OF THE PAPER
 import os
 import gc
 
@@ -22,8 +23,8 @@ from benchmark_generator.context.utils.prompting_interface import (
 from benchmark_generator.context.utils.jsonl import write_jsonl, read_jsonl
 
 
-def get_col_description_prompt(columns: str, column: str):
-    return f"""A table has the following columns:
+def get_col_description_prompt(columns: str, column: str, table_description: str):
+    return f"""A table, which represents {table_description}, has the following columns:
 /*
 {columns}
 */
@@ -107,6 +108,7 @@ def is_fit_in_memory(conversations, batch_size: int, hallucinate: bool):
 
 
 def get_optimal_batch_size(conversations, hallucinate: bool):
+    return 30
     print("Looking for an optimal batch size")
     max_batch_size = (
         50  # Change to a higher value if you have more capacity to explore batch size
@@ -124,15 +126,19 @@ def get_optimal_batch_size(conversations, hallucinate: bool):
     return optimal_batch_size
 
 
-def parse_tables(tables: list[str], tables_path: str):
+def parse_tables(tables: list[str], tables_path: str, contexts: dict[str,str]):
     conversations: list[str] = []
     conv_tables: list[str] = []
     conv_cols: list[str] = []
     for table in tqdm(tables):
-        df = pd.read_csv(f"{tables_path}/{table}.csv", nrows=0)
+        try:
+            df = pd.read_csv(f"{tables_path}/{table}.csv", nrows=0)
+        except pd.errors.EmptyDataError:
+            continue
+        table_context = [i['context'] for i in contexts if i['table'] == table][0]
         cols = df.columns
         for col in cols:
-            prompt = get_col_description_prompt(" | ".join(cols), col)
+            prompt = get_col_description_prompt(" | ".join(cols), col, table_context)
             conversations.append([{"role": "user", "content": prompt}])
             conv_tables.append(table)
             conv_cols.append(col)
@@ -140,12 +146,12 @@ def parse_tables(tables: list[str], tables_path: str):
 
 
 def generate_schema_narration_summaries(
-    tables_path: str, summaries_name: str, hallucinate: bool, model_name: str
+    tables_path: str, summaries_name: str, hallucinate: bool, model_name: str, contexts: dict[str,str]
 ):
     tables = sorted([file[:-4] for file in os.listdir(tables_path)])
     summaries: list[dict[str, str]] = []
 
-    conversations, conv_tables, conv_cols = parse_tables(tables, tables_path)
+    conversations, conv_tables, conv_cols = parse_tables(tables, tables_path, contexts)
     optimal_batch_size = get_optimal_batch_size(conversations, hallucinate)
     sorted_indices = get_special_indices(conversations, optimal_batch_size)
 
@@ -248,16 +254,19 @@ if __name__ == "__main__":
     TABLES_SRC: str = constants["data_src"] + "tables/"
     TABLES: dict[str, str] = constants["tables"]
 
+    # Hardcoded ctx
+    contexts = read_jsonl('../../../buysite_data/context.jsonl')
+
     if dataset == "all":
         for table_info in TABLES.items():
             summaries_name, table_name = table_info
             tables_path = TABLES_SRC + table_name
-            generate_schema_narration_summaries(tables_path, summaries_name, hallucinate, model_name)
+            generate_schema_narration_summaries(tables_path, summaries_name, hallucinate, model_name, contexts)
     else:
         try:
             table_name = TABLES[dataset]
             tables_path = TABLES_SRC + table_name
-            generate_schema_narration_summaries(tables_path, dataset, hallucinate, model_name)
+            generate_schema_narration_summaries(tables_path, dataset, hallucinate, model_name, contexts)
         except KeyError:
             print(
                 f"Dataset {dataset} not found! Please define the path in `constants.json`."

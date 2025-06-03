@@ -1,7 +1,7 @@
 import json
 
 
-DATA_SRC = "../data_src"
+DATA_SRC = "data_src"
 CONTENTS_PATH = "pneuma_summarizer/summaries"
 DATASETS = {
     "chembl": "pneuma_chembl_10K",
