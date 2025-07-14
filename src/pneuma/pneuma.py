@@ -207,13 +207,14 @@ class Pneuma:
             self.__init_registrar()
         return self.registrar.add_metadata(metadata_path, table_id)
 
-    def summarize(self, table_id: str = None) -> str:
+    def summarize(self, table_id: str = None, existing_summaries: dict[str, str] = None) -> str:
         """
         Summarizes the contents of all unsummarized tables or a specific table
         if `table_id` is provided using the `Summarizer` module.
 
         ## Args
         - **table_id** (`str`): The specific table ID to be summarized.
+        - **existing_summaries** (`dict[str, str]`): Existing summaries of the tables.
 
         ## Returns
         - `str`: A JSON string representing the result of the process (`Response`).
