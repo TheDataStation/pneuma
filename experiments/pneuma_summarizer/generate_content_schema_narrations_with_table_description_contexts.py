@@ -108,7 +108,6 @@ def is_fit_in_memory(conversations, batch_size: int, hallucinate: bool):
 
 
 def get_optimal_batch_size(conversations, hallucinate: bool):
-    return 30
     print("Looking for an optimal batch size")
     max_batch_size = (
         50  # Change to a higher value if you have more capacity to explore batch size
