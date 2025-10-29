@@ -5,3 +5,4 @@ logger = logging.getLogger("jax._src.xla_bridge")
 logger.setLevel(logging.ERROR)
 
 from pneuma.pneuma import Pneuma
+from pneuma.expander import Expander
