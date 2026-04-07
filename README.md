@@ -2,12 +2,12 @@
 
 # Pneuma
 [![Docs](https://img.shields.io/badge/Read_the_Docs-maroon?logo=readthedocs)](https://thedatastation.github.io/pneuma)
+[![arXiv](https://img.shields.io/badge/arXiv-2504.09207-b31b1b?logo=arxiv)](https://arxiv.org/abs/2504.09207)
 [![Colab Demo](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/TheDataStation/pneuma/blob/main/quickstart-colab.ipynb)
 [![PyPI](https://img.shields.io/pypi/v/pneuma)](https://pypi.org/project/pneuma/)
 
 `Pneuma` is an LLM-powered data discovery system for tabular data. Given a natural language query,
-`Pneuma` searches an indexed collection and retrieves the most relevant tables for the question. It performs this search by leveraging both **content** (columns and rows) and **context** (metadata) to match tables with questions.
-
+`Pneuma` searches an indexed collection and retrieves the most relevant tables for the question. It performs this search by leveraging both **content** (columns and rows) and **context** (metadata) to match tables with questions. We have since continued the project, extending `Pneuma` into `Pneuma-Seeker`, an agentic data discovery and preparation system to fulfill information needs on tabular data: [Paper](https://arxiv.org/abs/2603.10747); [Code](https://github.com/TheDataStation/pneuma-seeker).
 
 ## Getting Started
 
@@ -81,3 +81,25 @@ retrieved_tables = response["data"]["response"]
 ## Pneuma's CLI
 
 To use `Pneuma` via the command line, refer to the [CLI reference documentation](https://github.com/TheDataStation/pneuma/blob/main/cli.md) for detailed instructions.
+
+# Citation
+If you would like to cite this paper, please use the following BibTeX entry:
+```
+@article{Pneuma2025,
+    author = {Balaka, Muhammad Imam Luthfi and Alexander, David and Wang, Qiming and Gong, Yue and Krisnadhi, Adila and Castro Fernandez, Raul},
+    title = {Pneuma: Leveraging LLMs for Tabular Data Representation and Retrieval in an End-to-End System},
+    year = {2025},
+    issue_date = {June 2025},
+    publisher = {Association for Computing Machinery},
+    address = {New York, NY, USA},
+    volume = {3},
+    number = {3},
+    url = {https://doi.org/10.1145/3725337},
+    doi = {10.1145/3725337},
+    journal = {Proc. ACM Manag. Data},
+    month = jun,
+    articleno = {200},
+    numpages = {28},
+    keywords = {data discovery, large language models, natural-language questions}
+}
+```
