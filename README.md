@@ -6,12 +6,11 @@
 [![Colab Demo](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/TheDataStation/pneuma/blob/main/quickstart-colab.ipynb)
 [![PyPI](https://img.shields.io/pypi/v/pneuma)](https://pypi.org/project/pneuma/)
 
-`Pneuma` is an LLM-powered data discovery system for tabular data. Given a natural language query,
-`Pneuma` searches an indexed collection and retrieves the most relevant tables for the question. It performs this search by leveraging both **content** (columns and rows) and **context** (metadata) to match tables with questions. We have since continued the project, extending `Pneuma` into `Pneuma-Seeker`, an agentic data discovery and preparation system to fulfill information needs on tabular data: [Paper](https://arxiv.org/abs/2603.10747); [Code](https://github.com/TheDataStation/pneuma-seeker).
+`Pneuma` is an LLM-powered data discovery system for tabular data. Given a natural language query, `Pneuma` searches an indexed collection and retrieves the most relevant tables for the question. It performs this search by leveraging both **content** (columns and rows) and **context** (metadata) to match tables with questions.
 
 ## Getting Started
 
-If you would like to try `Pneuma` without installation, you can use our [Colab notebook](https://colab.research.google.com/github/TheDataStation/pneuma/blob/main/quickstart.ipynb). For local installation, you may use an OpenAI API token or a local GPU **with at least 20 GB of VRAM** (to load and prompt both the LLM and embedding model).
+If you would like to try `Pneuma` without installation, you can use our [Colab notebook](https://colab.research.google.com/github/TheDataStation/pneuma/blob/main/quickstart-colab.ipynb). For local installation, you may use an OpenAI API token or a local GPU **with at least 20 GB of VRAM** (to load and prompt both the LLM and embedding model).
 
 To install the latest stable release from PyPI:
 
@@ -42,6 +41,8 @@ $ conda install -c nvidia cuda-toolkit -y
 The simplest way to explore `Pneuma` is by running the [quickstart Jupyter notebook](https://github.com/TheDataStation/pneuma/blob/main/quickstart.ipynb). This notebook walks you through `Pneuma`'s full workflow, from **data registration** to **querying**. For those eager to dive in, here’s a snippet showcasing its functionality:
 
 ```python
+import json
+
 from src.pneuma import Pneuma
 
 # Initialize Pneuma
@@ -82,8 +83,9 @@ retrieved_tables = response["data"]["response"]
 
 To use `Pneuma` via the command line, refer to the [CLI reference documentation](https://github.com/TheDataStation/pneuma/blob/main/cli.md) for detailed instructions.
 
-# Citation
-If you would like to cite this paper, please use the following BibTeX entry:
+## Citation
+
+If you would like to cite this work, please use the following BibTeX entry:
 ```
 @article{Pneuma2025,
     author = {Balaka, Muhammad Imam Luthfi and Alexander, David and Wang, Qiming and Gong, Yue and Krisnadhi, Adila and Castro Fernandez, Raul},
